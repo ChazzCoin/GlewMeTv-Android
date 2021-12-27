@@ -1,11 +1,12 @@
-package io.aokihome.glewmetv
+package io.aokihome.glewmetv.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.models.Hookup
 import kotlinx.android.synthetic.main.activity_hookup.*
 
-class HookupActivity : AppCompatActivity() {
+class HookupDetailsActivity : AppCompatActivity() {
 
     companion object {
         var staticHookup: Hookup? = null
@@ -14,7 +15,7 @@ class HookupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hookup)
-        setSupportActionBar(findViewById(R.id.toolbar))
+//        setSupportActionBar(findViewById(R.id.toolbar))
 
         staticHookup?.let {
             txtHeader.text = it.title

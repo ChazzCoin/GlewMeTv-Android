@@ -5,14 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.aokihome.glewmetv.MainActivity
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.http.RiptHttpRequest
 import io.aokihome.glewmetv.models.Hookup
 import io.aokihome.glewmetv.models.parseToHookup
+import io.aokihome.glewmetv.utils.main
 import io.aokihome.glewmetv.viewholders.HookupAdapter
 import kotlinx.android.synthetic.main.fragment_metareport.*
 import kotlinx.coroutines.CoroutineScope
@@ -25,12 +24,9 @@ import org.json.JSONObject
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class MetaReportFragment(val mainActivity: MainActivity?=null) : Fragment() {
-    private val job = SupervisorJob()
-    val riptDispatcher = CoroutineScope(Dispatchers.IO + job)
-    val mainDispatcher = CoroutineScope(Dispatchers.Main + job)
     var hookupAdapter: HookupAdapter? = null
     val listOfHookups = mutableListOf<Hookup>()
-//    val mainActivity: MainActivity? = null
+    val io = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     //recyclerView
 //    val layout = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -43,17 +39,20 @@ class MetaReportFragment(val mainActivity: MainActivity?=null) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        riptDispatcher.launch {
+
+        main { txtLoad.text = "Initiating..." }
+        io.launch {
             loadHookups()
         }
     }
 
 
     private suspend fun loadHookups() {
+        main {txtLoad.text = "Loading Hookups..."}
         listOfHookups.clear()
         val response = RiptHttpRequest().getAsync(RiptHttpRequest.VAATU_BASE_URL).await()
         val listOfHookupsObjs = RiptHttpRequest.parseHookups(response)
-
+        main {txtLoad.text = "Parsing Hookups..."}
         for (hookup in listOfHookupsObjs) {
             val item = hookup
             try {
@@ -68,19 +67,20 @@ class MetaReportFragment(val mainActivity: MainActivity?=null) : Fragment() {
             println(item)
         }
         println(listOfHookups)
-        mainDispatcher.launch {
+
+        main {
+            txtLoad.text = "Setting Up RecyclerView..."
             setupHookupAdapter()
         }
 
     }
     private fun setupHookupAdapter() {
         listOfHookups.filter { it.source.toString() != "Twitter" }
-//        listOfHookups.sortBy { it.rank }
-//        listOfHookups.reverse()
-        hookupAdapter = HookupAdapter(this, listOfHookups)
+        hookupAdapter = HookupAdapter(MainGlewMeTvActivity.context, listOfHookups)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = hookupAdapter
         hookupAdapter?.notifyDataSetChanged()
+        txtLoad.text = "DONE!"
 
     }
 }

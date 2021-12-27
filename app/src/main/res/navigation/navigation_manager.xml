@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Created by ChazzCoin : December 2021 -->
+
+<!-- MAIN NAVIGATION -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_manager"
+    app:startDestination="@+id/navigation_dashboard">
+
+    <fragment
+        android:id="@+id/navigation_hookup_list"
+        android:name="io.aokihome.glewmetv.ui.MetaReportFragment"
+        android:label="Hookups"
+        tools:layout="@layout/fragment_metareport" />
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="io.aokihome.glewmetv.ui.DashboardFragment"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+    <fragment
+        android:id="@+id/navigation_events"
+        android:name="io.aokihome.glewmetv.ui.EventsFragment"
+        android:label="Events"
+        tools:layout="@layout/fragment_events" />
+
+</navigation>

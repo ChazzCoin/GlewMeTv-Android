@@ -12,7 +12,7 @@
     android:layout_margin="20dp"
     android:background="@drawable/border_shadow"
     android:orientation="vertical"
-    tools:context=".HookupActivity">
+    tools:context=".ui.HookupDetailsActivity">
 
     <TextView
         android:id="@+id/txtHeader"

@@ -17,9 +17,9 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="io.aokihome.glewmetv.SecondFragment"
+        android:name="io.aokihome.glewmetv.ui.EventsFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_events">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"

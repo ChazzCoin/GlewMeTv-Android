@@ -1,6 +1,7 @@
 
 package io.aokihome.glewmetv.viewholders
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,15 +9,14 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
-import io.aokihome.glewmetv.MainActivity
+import io.aokihome.glewmetv.ui.HookupDetailsActivity
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.models.Hookup
-import io.aokihome.glewmetv.ui.HookupFragment
-import io.aokihome.glewmetv.ui.MetaReportFragment
+import io.aokihome.glewmetv.ui.MainGlewMeTvActivity
+import io.aokihome.glewmetv.ui.readHookupDialog
 
 
-class HookupAdapter(var context: MetaReportFragment?, var listOfHookups: List<Hookup>? = null):
+class HookupAdapter(var context: MainGlewMeTvActivity?, var listOfHookups: List<Hookup>? = null):
         RecyclerView.Adapter<HookupAdapter.HookupViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HookupViewHolder {
@@ -38,14 +38,11 @@ class HookupAdapter(var context: MetaReportFragment?, var listOfHookups: List<Ho
             holder.bind(itHookups[position])
             //onClickListener
             holder.itemView.setOnClickListener {
-//                HookupActivity.staticHookup = itHookups[position]
-                val frag = HookupFragment()
-                frag.hookup = itHookups[position]
-                context?.childFragmentManager
-                    ?.beginTransaction()
-                    ?.add(R.id.hookupFragment, frag)
-                    ?.addToBackStack(null)
-                    ?.commit()
+                HookupDetailsActivity.staticHookup = itHookups[position]
+                context?.let {
+                    println("HOOKUP CLICKED: starting dialog now!")
+                    readHookupDialog(it, itHookups[position])
+                }
 
             }
         }
@@ -65,9 +62,9 @@ class HookupAdapter(var context: MetaReportFragment?, var listOfHookups: List<Ho
             textRank.text = "Rank: ${hookup.rank}"
             textSource.text = hookup.source.toString()
             textDate.text = hookup.published_date
-            if (!hookup.imgUrl.isNullOrEmpty()) {
-                Picasso.get().load(hookup.imgUrl).fit().into(imgUrl)
-            }
+//            if (!hookup.imgUrl.isNullOrEmpty()) {
+//                Picasso.get().load(hookup.imgUrl).fit().into(imgUrl)
+//            }
 
         }
     }
