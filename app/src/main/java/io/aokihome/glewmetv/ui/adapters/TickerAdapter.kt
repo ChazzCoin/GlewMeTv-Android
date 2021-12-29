@@ -1,5 +1,5 @@
 
-package io.aokihome.glewmetv.viewholders
+package io.aokihome.glewmetv.ui.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.aokihome.glewmetv.R
-import io.aokihome.glewmetv.models.Ticker
+import io.aokihome.glewmetv.db.Ticker
 import org.jetbrains.anko.textColor
 
 
@@ -19,7 +19,7 @@ class TickerAdapter(): RecyclerView.Adapter<TickerAdapter.TickerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TickerViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
             R.layout.item_ticker_scroll, parent, false)
-        return TickerViewHolder(convertView = view)
+        return TickerViewHolder(convertView=view)
     }
 
     fun addListOfTickers(tickers: List<Ticker>) {

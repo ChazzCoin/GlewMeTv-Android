@@ -3,12 +3,12 @@ package io.aokihome.glewmetv.ui
 import android.app.Activity
 import android.app.Dialog
 import io.aokihome.glewmetv.R
-import io.aokihome.glewmetv.models.Hookup
-import kotlinx.android.synthetic.main.activity_hookup.*
+import io.aokihome.glewmetv.db.Hookup
+import kotlinx.android.synthetic.main.dialog_hookup_details.*
 
-fun readHookupDialog(activity: Activity, hookup:Hookup?) : Dialog {
+fun readHookupDialog(activity: Activity, hookup: Hookup?) : Dialog {
     val dialog = Dialog(activity)
-    dialog.setContentView(R.layout.activity_hookup)
+    dialog.setContentView(R.layout.dialog_hookup_details)
     dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
     hookup?.let {

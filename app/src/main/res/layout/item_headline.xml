@@ -4,7 +4,8 @@
     android:layout_width="wrap_content"
     android:layout_height="200dp">
 
-    <LinearLayout
+    <io.aokihome.glewmetv.ui.adapters.CustomLayout
+        android:id="@+id/itemLinearLayout"
         android:layout_width="150dp"
         android:layout_height="175dp"
         android:background="@drawable/border_shadow_primary_dark"
@@ -15,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtHeadlineTitle"
+            android:id="@+id/txtTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Title"
@@ -24,11 +25,30 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/txtHeadlineRank"
+            android:id="@+id/txtRank"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Rank"
             android:textAlignment="center"
             android:textColor="@color/colorAccent" />
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtSource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Source"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
+
+    </io.aokihome.glewmetv.ui.adapters.CustomLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

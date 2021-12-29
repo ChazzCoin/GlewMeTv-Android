@@ -5,19 +5,26 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import io.aokihome.glewmetv.db.Session
 import io.aokihome.glewmetv.ui.MainGlewMeTvActivity
+import io.realm.Realm
+import io.realm.RealmConfiguration
 
 
 class MainActivity : AppCompatActivity() {
 
-//    var navBar: NavBar? = null
-
+    companion object {
+        var session: Session? = null
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-//        setSupportActionBar(findViewById(R.id.toolbar))
-        // -> Init Navigation Bar Setup
-//        this.navBar = NavBar(this)
+        //Init Realm DB
+        Realm.init(this)
+        val realmConfiguration = RealmConfiguration.Builder()
+            .name(BuildConfig.APPLICATION_ID + ".realm")
+            .deleteRealmIfMigrationNeeded()
+            .build()
+        Realm.setDefaultConfiguration(realmConfiguration)
 
         startActivity(Intent(this@MainActivity, MainGlewMeTvActivity::class.java))
     }
