@@ -6,9 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.navigation.fragment.findNavController
 import io.aokihome.glewmetv.R
-import io.aokihome.glewmetv.db.removeAllHookups
+import io.aokihome.glewmetv.db.removeAllHookupsOnMain
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -27,7 +26,7 @@ class EventsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<Button>(R.id.button_second).setOnClickListener {
-            removeAllHookups()
+            removeAllHookupsOnMain()
         }
     }
 }

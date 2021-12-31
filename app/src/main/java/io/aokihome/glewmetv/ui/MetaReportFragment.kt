@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.*
-import io.aokihome.glewmetv.http.RiptHttpRequest
+import io.aokihome.glewmetv.http.GmtHttpRequest
 import io.aokihome.glewmetv.utils.*
 import io.aokihome.glewmetv.ui.adapters.HookupListAdapter
 import io.realm.RealmList
@@ -40,27 +40,26 @@ class MetaReportFragment() : Fragment() {
 
         txtLoadOnMain("Initiating Session..." )
         session = Session.session
-//        runLoadHookupsAsync()
         session {
             if (!it.hookups.isNullOrEmpty()) {
                 listOfRealmHookups = it.hookups
                 txtLoadOnMain("Setting Up Saved Hookups from Realm...")
                 setupRealmHookupAdapter()
-                return
             } else {
                 txtLoadOnMain("Session found but no hookups, loading new hookups...")
                 runLoadHookupsAsync()
-                return
             }
+        } ?: run {
+            txtLoadOnMain("No session found, loading new hookups...")
+            runLoadHookupsAsync()
         }
 
-        txtLoadOnMain("No session found, loading new hookups...")
-        runLoadHookupsAsync()
+
 
     }
 
     fun runLoadHookupsAsync() {
-        ioLaunch { loadHookups() }
+        io { loadHookups() }
     }
 
     private fun txtLoadOnMain(text:String) {
@@ -70,23 +69,10 @@ class MetaReportFragment() : Fragment() {
     private suspend fun loadHookups() {
         txtLoadOnMain("Loading Hookups...")
         listOfHookups.clear()
-        removeAllHookups()
-        val response = RiptHttpRequest().getAsync(RiptHttpRequest.VAATU_BASE_URL).await()
-        val listOfJsonObjs = parseToJSON(response)
+        removeAllHookupsOnMain()
+        val response = GmtHttpRequest().getAsync(GmtHttpRequest.URL_HOOKUPS_DATA).await()
         txtLoadOnMain("Parsing Hookups...")
-        for (hookupObj in listOfJsonObjs) {
-            val item = hookupObj
-            try {
-                val jsonObject = JSONObject(item.toString())
-                val tempHookup = jsonObject.parseToHookup()
-                main{
-                    listOfHookups.add(tempHookup)
-                    addHookupToSessionOnMain(tempHookup)
-                }
-            } catch (e: Exception) {
-                println("failed: $e")
-            }
-        }
+        Parser.Hookups(response)
         txtLoadOnMain("Setting Up RecyclerView...")
         main { setupHookupAdapter() }
     }
@@ -98,30 +84,20 @@ class MetaReportFragment() : Fragment() {
         recyclerView.adapter = hookupAdapter
         hookupAdapter?.notifyDataSetChanged()
         txtLoad.text = "DONE!"
+        showSuccess("New Hookups Loaded from Server!", MainGlewMeTvActivity.context)
     }
 
     private fun setupRealmHookupAdapter() {
-//        listOfHookups.filter { it.source.toString() != "Twitter" }
-        listOfHookups = listOfRealmHookups.convertRealmListToList()
-        listOfHookups.toSet().toList()
-        listOfHookups.sortBy { it.rank }
-        listOfHookups.reversed()
+        listOfHookups = getHookupsList()
+        listOfHookups.prepHookupsForDisplay()
+        listOfHookups.filterOutSource("Twitter")
         hookupAdapter = HookupListAdapter(context=MainGlewMeTvActivity.context, listOfHookups=listOfHookups)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = hookupAdapter
         hookupAdapter?.notifyDataSetChanged()
         txtLoad.text = "DONE!"
-
+        showSuccess("Realm Hookups Loaded!", MainGlewMeTvActivity.context)
     }
 
 }
 
-fun RealmList<Hookup>?.convertRealmListToList() : MutableList<Hookup> {
-    val tempList = mutableListOf<Hookup>()
-    this?.let {
-        for (item in it) {
-            tempList.add(item)
-        }
-    }
-    return tempList
-}

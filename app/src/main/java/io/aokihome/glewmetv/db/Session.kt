@@ -1,6 +1,7 @@
 package io.aokihome.glewmetv.db
 
-import io.aokihome.glewmetv.utils.executeRealm
+import io.aokihome.glewmetv.utils.executeRealmOnMain
+import io.aokihome.glewmetv.utils.main
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmObject
@@ -18,10 +19,15 @@ open class Session : RealmObject() {
 
     var hookups : RealmList<Hookup>? = RealmList()
     var tickers : RealmList<Ticker>? = RealmList()
+    var metaverses : RealmList<Metaverse>? = RealmList()
+    var glewmes : RealmList<GlewMe>? = RealmList()
 
     init {
         hookups = RealmList<Hookup>()
         tickers = RealmList<Ticker>()
+        metaverses = RealmList()
+        glewmes = RealmList()
+
     }
 
     /** -> EVERYTHING IS STATIC BELOW THIS POINT <- **/
@@ -51,8 +57,42 @@ open class Session : RealmObject() {
     }
 }
 
-inline fun session(block: (Session) -> Unit): Unit? {
-    return Session.session?.let { block(it) }
+fun getHookups() : RealmList<Hookup>? {
+    return session()?.hookups
+}
+
+fun getHookupsList() : MutableList<Hookup> {
+    return getHookups().convertRealmListToList()
+}
+
+fun RealmList<Hookup>?.convertRealmListToList() : MutableList<Hookup> {
+    val tempList = mutableListOf<Hookup>()
+    this?.let {
+        for (item in it) {
+            tempList.add(item)
+        }
+    }
+    return tempList
+}
+
+fun MutableList<Hookup>.prepHookupsForDisplay() {
+    this.distinct().toList() // Remove any Duplicates
+    this.sortBy { it.rank }  // Sort by Rank
+    this.reversed()          // Reverse order, rank 1 will be at the bottom otherwise.
+}
+
+fun MutableList<Hookup>.topTen(): MutableList<Hookup> {
+    val listCount = this.count()
+    val highest = if (listCount < 10) listCount else 10
+    return this.subList(0, highest)       // Reverse order, rank 1 will be at the bottom otherwise.
+}
+
+inline fun session(crossinline block: (Session) -> Unit): Unit? {
+    return Session.session?.let {
+        main {
+            block(it)
+        }
+    }
 }
 
 fun session(): Session? {
@@ -62,37 +102,67 @@ fun session(): Session? {
 /** -> Hookups <- **/
 fun addHookupToSessionOnMain(hookup: Hookup) {
     val session = Session.session
-    executeRealm { itRealm ->
+    executeRealmOnMain { itRealm ->
         if (session != null) {
             session.hookups?.add(hookup)
             itRealm.copyToRealmOrUpdate(session) }
     }
 }
-
-fun saveSession() {
+/** -> Tickers <- **/
+fun addTickerToSessionOnMain(ticker: Ticker) {
     val session = Session.session
-    executeRealm { itRealm ->
+    executeRealmOnMain { itRealm ->
+        if (session != null) {
+            session.tickers?.add(ticker)
+            itRealm.copyToRealmOrUpdate(session) }
+    }
+}
+
+/** -> Metaverse <- **/
+fun addMetaverseToSessionOnMain(metaverse: Metaverse) {
+    val session = Session.session
+    executeRealmOnMain { itRealm ->
+        if (session != null) {
+            session.metaverses?.add(metaverse)
+            itRealm.copyToRealmOrUpdate(session) }
+    }
+}
+
+/** -> GlewMe <- **/
+fun addGlewMeToSessionOnMain(glewme: GlewMe) {
+    val session = Session.session
+    executeRealmOnMain { itRealm ->
+        if (session != null) {
+            session.glewmes?.add(glewme)
+            itRealm.copyToRealmOrUpdate(session) }
+    }
+}
+
+fun saveSessionOnMain() {
+    val session = Session.session
+    executeRealmOnMain { itRealm ->
         if (session != null) {
             itRealm.copyToRealmOrUpdate(session)
         }
     }
 }
 
-fun removeAllHookups() {
+fun removeAllHookupsOnMain() {
     val session = Session.session
-    executeRealm {
+    executeRealmOnMain {
         session?.hookups?.clear()
     }
 }
 
-fun createHookupObject(obj: JSONArray) {
-    executeRealm { itRealm ->
-        itRealm.createAllFromJson(Hookup::class.java, obj)
-    }
-}
+//fun createHookupObjectOnMain(obj: JSONArray) {
+//    executeRealmOnMain { itRealm ->
+//        itRealm.createAllFromJson(Hookup::class.java, obj)
+//
+//    }
+//}
 
-fun createHookupObject(obj: JSONObject) {
-    executeRealm { itRealm ->
+fun createHookupObjectOnMain(obj: JSONObject) {
+    executeRealmOnMain { itRealm ->
         itRealm.createObjectFromJson(Hookup::class.java, obj)
     }
 }

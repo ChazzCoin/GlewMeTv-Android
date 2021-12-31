@@ -7,34 +7,13 @@ import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class RiptHttpRequest {
+class GmtHttpRequest {
     constructor()
 
     companion object {
-        val VAATU_BASE_URL = "http://192.168.1.100:3671/hookups"
-
-        fun parseHookups(obj: Response) : List<JSONObject> {
-            val tempList = mutableListOf<JSONObject>()
-            try {
-                val body = String(obj.body().toByteArray(), Charsets.UTF_8)
-                val jsonArray = JSONArray(body)
-                val condition = true
-                var i = 0
-                while (condition) {
-                    if (jsonArray[i] != null) {
-                        val current_obj = jsonArray[i]
-                        val jsonObject = JSONObject(current_obj.toString())
-                        tempList.add(jsonObject)
-                        i++
-                    } else {
-                        break
-                    }
-                }
-            } catch (e: java.lang.Exception) {
-                println("Couldn't parse object.")
-            }
-            return tempList
-        }
+        val URL_BASE = "http://192.168.1.100:3671"
+        val URL_HOOKUPS_DATA = "$URL_BASE/hookups"
+        val URL_GLEWMETV_DATA = "$URL_BASE/glewmetv/data"
     }
 
     private val job = SupervisorJob()
@@ -66,3 +45,17 @@ class RiptHttpRequest {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

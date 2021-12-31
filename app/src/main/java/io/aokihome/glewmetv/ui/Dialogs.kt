@@ -10,12 +10,13 @@ fun readHookupDialog(activity: Activity, hookup: Hookup?) : Dialog {
     val dialog = Dialog(activity)
     dialog.setContentView(R.layout.dialog_hookup_details)
     dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+    dialog.window?.setLayout(1000, 300)
 
     hookup?.let {
         dialog.txtHeader.text = it.title
         dialog.txtRank.text = "Rank: ${it.rank}"
         dialog.txtUrl.text = it.url
-        dialog.txtBody.setText(it.body)
+        dialog.txtBody.setText(it.body.trim())
         dialog.txtTopic.text = "Source: ${it.source}"
         dialog.txtAuthor.text = it.author
         dialog.txtCategory.text = it.category

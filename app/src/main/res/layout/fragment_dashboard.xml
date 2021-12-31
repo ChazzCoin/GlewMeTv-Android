@@ -7,44 +7,51 @@
     android:layout_height="match_parent"
     tools:context=".ui.DashboardFragment">
 
-    <ImageView
-        android:id="@+id/imgBanner"
-        android:layout_width="wrap_content"
-        android:layout_height="175dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/glewmetv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerTickers"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgBanner"
-        tools:listitem="@layout/item_ticker_scroll">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerHeadlines"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerTickers"
-        tools:listitem="@layout/item_headline">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerEvents"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerHeadlines"
-        tools:listitem="@layout/item_event" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/imgBanner"
+                android:layout_width="wrap_content"
+                android:layout_height="175dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/glewmetv" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerTickers"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                tools:listitem="@layout/item_ticker_scroll">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerHeadlines"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                tools:listitem="@layout/item_headline">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_event" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
