@@ -78,11 +78,14 @@ class DashboardFragment : Fragment() {
 
     private fun setupRealmHookupAdapter() {
         listOfHookups = getHookupsList()
+//        val copy = listOfHookups
+//        recyclerEvents.initHookups(copy, false)
         listOfHookups.prepHookupsForDisplay()
-        listOfHookups.filterOutSource("Twitter")
+//        listOfHookups.filterOutSource("Twitter")
+//        recyclerEvents.initHookups(listOfHookups, false)
         listOfHookups = listOfHookups.topTen()
         hookupAdapter = recyclerHeadlines.initHookups(listOfHookups, true)
-        recyclerEvents.initHookups(listOfHookups, false)
+
     }
 
 }

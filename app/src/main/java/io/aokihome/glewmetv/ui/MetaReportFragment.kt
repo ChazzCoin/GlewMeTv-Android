@@ -38,42 +38,40 @@ class MetaReportFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        txtLoadOnMain("Initiating Session..." )
+        activity?.actionBar?.title = "Metaverse Weekly"
+//        txtLoadOnMain("Initiating Session..." )
         session = Session.session
         session {
             if (!it.hookups.isNullOrEmpty()) {
                 listOfRealmHookups = it.hookups
-                txtLoadOnMain("Setting Up Saved Hookups from Realm...")
+//                txtLoadOnMain("Setting Up Saved Hookups from Realm...")
                 setupRealmHookupAdapter()
             } else {
-                txtLoadOnMain("Session found but no hookups, loading new hookups...")
+//                txtLoadOnMain("Session found but no hookups, loading new hookups...")
                 runLoadHookupsAsync()
             }
         } ?: run {
-            txtLoadOnMain("No session found, loading new hookups...")
+//            txtLoadOnMain("No session found, loading new hookups...")
             runLoadHookupsAsync()
         }
-
-
-
     }
 
     fun runLoadHookupsAsync() {
         io { loadHookups() }
     }
 
-    private fun txtLoadOnMain(text:String) {
-        main { txtLoad.text = text}
-    }
+//    private fun txtLoadOnMain(text:String) {
+//        main { txtLoad.text = text}
+//    }
 
     private suspend fun loadHookups() {
-        txtLoadOnMain("Loading Hookups...")
+//        txtLoadOnMain("Loading Hookups...")
         listOfHookups.clear()
         removeAllHookupsOnMain()
         val response = GmtHttpRequest().getAsync(GmtHttpRequest.URL_HOOKUPS_DATA).await()
-        txtLoadOnMain("Parsing Hookups...")
+//        txtLoadOnMain("Parsing Hookups...")
         Parser.Hookups(response)
-        txtLoadOnMain("Setting Up RecyclerView...")
+//        txtLoadOnMain("Setting Up RecyclerView...")
         main { setupHookupAdapter() }
     }
 
@@ -83,7 +81,6 @@ class MetaReportFragment() : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = hookupAdapter
         hookupAdapter?.notifyDataSetChanged()
-        txtLoad.text = "DONE!"
         showSuccess("New Hookups Loaded from Server!", MainGlewMeTvActivity.context)
     }
 
@@ -95,7 +92,6 @@ class MetaReportFragment() : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = hookupAdapter
         hookupAdapter?.notifyDataSetChanged()
-        txtLoad.text = "DONE!"
         showSuccess("Realm Hookups Loaded!", MainGlewMeTvActivity.context)
     }
 

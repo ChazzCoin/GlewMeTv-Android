@@ -8,7 +8,7 @@
     <item
         android:id="@+id/navigation_hookup_list"
         android:icon="@drawable/f_truck_dark"
-        android:title="Hookups" />
+        android:title="Weekly" />
     <item
         android:id="@+id/navigation_dashboard"
         android:icon="@drawable/f_truck_dark"
@@ -16,5 +16,5 @@
     <item
         android:id="@+id/navigation_events"
         android:icon="@drawable/f_truck_dark"
-        android:title="Events" />
+        android:title="GlewMe City" />
 </menu>

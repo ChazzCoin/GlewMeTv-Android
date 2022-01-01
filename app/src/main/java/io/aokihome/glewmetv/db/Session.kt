@@ -87,6 +87,13 @@ fun MutableList<Hookup>.topTen(): MutableList<Hookup> {
     return this.subList(0, highest)       // Reverse order, rank 1 will be at the bottom otherwise.
 }
 
+fun MutableList<Hookup>.removeTopTen(): MutableList<Hookup> {
+    val listCount = this.count()
+    if (listCount <= 10) return this
+    val highest = if (listCount < 10) listCount else 10
+    return this.subList(highest, this.indices.last)       // Reverse order, rank 1 will be at the bottom otherwise.
+}
+
 inline fun session(crossinline block: (Session) -> Unit): Unit? {
     return Session.session?.let {
         main {

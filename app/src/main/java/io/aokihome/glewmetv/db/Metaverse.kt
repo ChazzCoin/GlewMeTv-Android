@@ -1,6 +1,5 @@
 package io.aokihome.glewmetv.db
 
-import io.aokihome.glewmetv.utils.getSafeDouble
 import io.aokihome.glewmetv.utils.getSafeInt
 import io.aokihome.glewmetv.utils.getSafeString
 import io.realm.RealmList

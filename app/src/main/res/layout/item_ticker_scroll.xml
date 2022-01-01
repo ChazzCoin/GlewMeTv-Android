@@ -24,6 +24,7 @@
             android:layout_weight="1"
             android:text="MANA:"
             android:textAlignment="center"
+            android:textColor="@color/colorAccent"
             android:textStyle="bold" />
 
         <TextView

@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.Hookup
+import io.aokihome.glewmetv.db.removeTopTen
 import io.aokihome.glewmetv.ui.MainGlewMeTvActivity
 import io.aokihome.glewmetv.ui.readHookupDialog
 import io.realm.RealmList
@@ -33,8 +34,9 @@ class HookupListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolea
                 .inflate(R.layout.item_headline, parent, false)
             return HookupViewHolder(convertView = view)
         }
+        listOfHookups = listOfHookups?.removeTopTen()
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_list_hookups, parent, false)
+            .inflate(R.layout.item_list_hookups2, parent, false)
         return HookupViewHolder(convertView = view)
     }
 
@@ -79,21 +81,12 @@ class HookupListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolea
             textRank.text = "Rank: ${hookup.rank}"
             textSource.text = hookup.source.toString()
             textDate.text = hookup.published_date
-            if (!hookup.imgUrl.isNullOrEmpty()) {
-
-
-                if (isTopTen) {
-                    val mCustomLayout = itemView.findViewById<CustomLayout>(R.id.itemLinearLayout)
-                    Picasso.get().load("http://imageUrl").into(mCustomLayout);
-                } else {
-                    try {
-                        Picasso.get().load(hookup.imgUrl).fit().into(imgUrl)
-                    } catch (e: Exception) {
-                        println("Failed to load image: $e")
-                    }
+            if (hookup.imgUrl.isNotEmpty()) {
+                try {
+                    Picasso.get().load(hookup.imgUrl).fit().into(imgUrl)
+                } catch (e: Exception) {
+                    println("Failed to load image: $e")
                 }
-
-
             }
 
         }

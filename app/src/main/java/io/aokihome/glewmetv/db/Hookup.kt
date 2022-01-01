@@ -43,50 +43,6 @@ fun Response.toJsonObject() : JSONObject? {
     return null
 }
 
-fun JSONArray.toListOfJsonObjects() : List<JSONObject> {
-    val tempList = mutableListOf<JSONObject>()
-    try {
-        val condition = true
-        var i = 0
-        while (condition) {
-            if (this[i] != null) {
-                val current_obj = this[i]
-                val jsonObject = JSONObject(current_obj.toString())
-                tempList.add(jsonObject)
-                i++
-            } else {
-                break
-            }
-        }
-    } catch (e: java.lang.Exception) {
-        println("Couldn't parse object.")
-    }
-    return tempList
-}
-
-fun Response.toListOfJsonObjects() : List<JSONObject> {
-    val tempList = mutableListOf<JSONObject>()
-    try {
-        val body = String(this.body().toByteArray(), Charsets.UTF_8)
-        val jsonArray = JSONArray(body)
-        val condition = true
-        var i = 0
-        while (condition) {
-            if (jsonArray[i] != null) {
-                val current_obj = jsonArray[i]
-                val jsonObject = JSONObject(current_obj.toString())
-                tempList.add(jsonObject)
-                i++
-            } else {
-                break
-            }
-        }
-    } catch (e: java.lang.Exception) {
-        println("Couldn't parse object.")
-    }
-    return tempList
-}
-
 fun JSONObject.toHookup() : Hookup {
     val hookup = Hookup()
     hookup.id = getSafeString("id")

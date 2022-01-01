@@ -28,16 +28,6 @@ class MainActivity : AppCompatActivity() {
             .build()
         Realm.setDefaultConfiguration(realmConfiguration)
 //        io {
-//            println("starting1")
-//            await {
-//                loadHookups()
-//            }
-//            println("finished!")
-//            main {
-//                startActivity(Intent(this@MainActivity, MainGlewMeTvActivity::class.java))
-//            }
-//        }
-//        io {
 //            loadGlewMeTvData()
 //        }
         startActivity(Intent(this@MainActivity, MainGlewMeTvActivity::class.java))

@@ -19,10 +19,8 @@ class MainGlewMeTvActivity : AppCompatActivity() {
         var context: MainGlewMeTvActivity? = null
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_glewmetv)
         context = this
 
