@@ -20,7 +20,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#90000000"
+        android:background="#A9000000"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
     <TextView
-        android:id="@+id/txtDate"
+        android:id="@+id/txtEventDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
@@ -39,6 +39,7 @@
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imgUrl"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/imgUrl" />
 
     <TextView
@@ -64,7 +65,8 @@
         android:text="Rank"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/txtDate"
+        app:layout_constraintBottom_toTopOf="@+id/txtEventDate"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/imgUrl" />
 
     <TextView

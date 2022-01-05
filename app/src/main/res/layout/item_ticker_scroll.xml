@@ -9,7 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:layout_margin="5dp"
-        android:background="@drawable/border_shadow_transparent"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

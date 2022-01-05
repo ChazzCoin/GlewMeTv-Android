@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.DashboardFragment">
+    tools:context=".ui.main.DashboardFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -22,22 +22,22 @@
             android:orientation="vertical">
 
 
-            <ImageView
-                android:id="@+id/imgBanner"
-                android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/glewmetv" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerLiveEvents"
+                android:layout_width="match_parent"
+                android:layout_height="225dp"
+                tools:listitem="@layout/item_event_tv_banner"
+                android:background="@drawable/vintage_glewmetv_banner_transparent" />
 
             <TextView
                 android:id="@+id/headerTickers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:text="Metaverse Watch"
                 android:textColor="@color/colorAccent"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -53,9 +53,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
                 android:text="Top 10 Weekly"
                 android:textColor="@color/colorAccent"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -71,9 +73,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Metaverse Events"
                 android:textColor="@color/colorAccent"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView

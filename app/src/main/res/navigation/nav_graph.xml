@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="io.aokihome.glewmetv.ui.DashboardFragment"
+        android:name="io.aokihome.glewmetv.ui.main.DashboardFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_dashboard">
 
@@ -17,9 +17,9 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="io.aokihome.glewmetv.ui.EventsFragment"
+        android:name="io.aokihome.glewmetv.ui.main.GlewMeFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_events">
+        tools:layout="@layout/fragment_glewme">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/First2Fragment"
-        android:name="io.aokihome.glewmetv.ui.MetaReportFragment"
+        android:name="io.aokihome.glewmetv.ui.main.MetaReportFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_metareport">
 

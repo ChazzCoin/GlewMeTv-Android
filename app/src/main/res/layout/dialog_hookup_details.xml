@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/darkPurple"
-    tools:context=".ui.MainGlewMeTvActivity">
+    tools:context=".ui.main.MainGlewMeTvActivity">
 
     <!--    <com.google.android.material.appbar.AppBarLayout-->
     <!--        android:layout_width="match_parent"-->

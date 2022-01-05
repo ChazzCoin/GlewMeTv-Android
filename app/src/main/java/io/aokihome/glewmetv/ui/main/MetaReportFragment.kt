@@ -1,4 +1,4 @@
-package io.aokihome.glewmetv.ui
+package io.aokihome.glewmetv.ui.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_metareport.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.json.JSONObject
 import kotlin.collections.isNullOrEmpty
 
 /**
@@ -38,7 +37,6 @@ class MetaReportFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.actionBar?.title = "Metaverse Weekly"
 //        txtLoadOnMain("Initiating Session..." )
         session = Session.session
         session {
@@ -77,7 +75,7 @@ class MetaReportFragment() : Fragment() {
 
     private fun setupHookupAdapter() {
         listOfHookups.filter { it.source.toString() != "Twitter" }
-        hookupAdapter = HookupListAdapter(context=MainGlewMeTvActivity.context, listOfHookups=listOfHookups)
+        hookupAdapter = HookupListAdapter(context= MainGlewMeTvActivity.context, listOfHookups=listOfHookups)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = hookupAdapter
         hookupAdapter?.notifyDataSetChanged()
@@ -88,7 +86,7 @@ class MetaReportFragment() : Fragment() {
         listOfHookups = getHookupsList()
         listOfHookups.prepHookupsForDisplay()
         listOfHookups.filterOutSource("Twitter")
-        hookupAdapter = HookupListAdapter(context=MainGlewMeTvActivity.context, listOfHookups=listOfHookups)
+        hookupAdapter = HookupListAdapter(context= MainGlewMeTvActivity.context, listOfHookups=listOfHookups)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = hookupAdapter
         hookupAdapter?.notifyDataSetChanged()

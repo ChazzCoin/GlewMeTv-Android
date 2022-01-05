@@ -1,5 +1,6 @@
 package io.aokihome.glewmetv.db
 
+import io.aokihome.glewmetv.utils.executeRealm
 import io.aokihome.glewmetv.utils.executeRealmOnMain
 import io.aokihome.glewmetv.utils.main
 import io.realm.Realm
@@ -125,6 +126,15 @@ fun addTickerToSessionOnMain(ticker: Ticker) {
     }
 }
 
+fun addTickerToSession(ticker: Ticker) {
+    val session = Session.session
+    executeRealm { itRealm ->
+        if (session != null) {
+            session.tickers?.add(ticker)
+            itRealm.copyToRealmOrUpdate(session) }
+    }
+}
+
 /** -> Metaverse <- **/
 fun addMetaverseToSessionOnMain(metaverse: Metaverse) {
     val session = Session.session
@@ -135,10 +145,28 @@ fun addMetaverseToSessionOnMain(metaverse: Metaverse) {
     }
 }
 
+fun addMetaverseToSession(metaverse: Metaverse) {
+    val session = Session.session
+    executeRealm { itRealm ->
+        if (session != null) {
+            session.metaverses?.add(metaverse)
+            itRealm.copyToRealmOrUpdate(session) }
+    }
+}
+
 /** -> GlewMe <- **/
 fun addGlewMeToSessionOnMain(glewme: GlewMe) {
     val session = Session.session
     executeRealmOnMain { itRealm ->
+        if (session != null) {
+            session.glewmes?.add(glewme)
+            itRealm.copyToRealmOrUpdate(session) }
+    }
+}
+
+fun addGlewMeToSession(glewme: GlewMe) {
+    val session = Session.session
+    executeRealm { itRealm ->
         if (session != null) {
             session.glewmes?.add(glewme)
             itRealm.copyToRealmOrUpdate(session) }
@@ -158,6 +186,13 @@ fun removeAllHookupsOnMain() {
     val session = Session.session
     executeRealmOnMain {
         session?.hookups?.clear()
+    }
+}
+
+fun removeAllTickersOnMain() {
+    val session = Session.session
+    executeRealmOnMain {
+        session?.tickers?.clear()
     }
 }
 

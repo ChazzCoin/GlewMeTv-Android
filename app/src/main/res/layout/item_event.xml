@@ -1,32 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="250dp"
+    android:layout_margin="20dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/border_shadow_transparent"
-        android:orientation="vertical"
+    <ImageView
+        android:id="@+id/imgEventImage"
+        android:layout_width="0dp"
+        android:layout_height="125dp"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/glewmetv" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:background="@drawable/border_shadow_transparent"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/txtEventTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgEventImage">
 
         <TextView
-            android:id="@+id/txtEventTitle"
-            android:layout_width="match_parent"
+            android:id="@+id/txtEventPosition"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dessert Bash!" />
+            android:layout_margin="3dp"
+            android:layout_weight="1"
+            android:text="126, -56"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/txtMetaverseName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="GlewMeCity" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtEventLive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="LIVE!"
+        android:textColor="#EC0000"
+        app:layout_constraintStart_toStartOf="@+id/imgEventImage"
+        app:layout_constraintTop_toTopOf="@+id/imgEventImage" />
+
+    <TextView
+        android:id="@+id/txtEventTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="2dp"
+        android:text="Dessert Bash!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/txtEventDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="3dp"
+        android:text="Thursday Jan 7th 2022"
+        app:layout_constraintBottom_toTopOf="@+id/txtEventMetaverseName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtEventTitle" />
+
+    <TextView
+        android:id="@+id/txtEventMetaverseName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:text="Decentraland"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

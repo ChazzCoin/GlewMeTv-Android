@@ -7,7 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import io.aokihome.glewmetv.db.*
 import io.aokihome.glewmetv.http.GmtHttpRequest
-import io.aokihome.glewmetv.ui.MainGlewMeTvActivity
+import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
 import io.aokihome.glewmetv.utils.*
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -27,17 +27,7 @@ class MainActivity : AppCompatActivity() {
             .deleteRealmIfMigrationNeeded()
             .build()
         Realm.setDefaultConfiguration(realmConfiguration)
-//        io {
-//            loadGlewMeTvData()
-//        }
         startActivity(Intent(this@MainActivity, MainGlewMeTvActivity::class.java))
-    }
-
-
-    private suspend fun loadGlewMeTvData() {
-        val response = GmtHttpRequest().getAsync(GmtHttpRequest.URL_GLEWMETV_DATA).await()
-        val temp = Parser.AllDataPackages(response)
-        println(temp)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

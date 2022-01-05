@@ -1,6 +1,7 @@
 package io.aokihome.glewmetv.utils
 
 import com.github.kittinunf.fuel.core.Response
+import com.google.gson.JsonObject
 import io.aokihome.glewmetv.db.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -19,7 +20,10 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
     class AllDataPackages(response: Response, save:Boolean=true, type:String= ALL_DATA_PACKAGES)
         : Parser(save, type, response)
 
-    class Metaverse(response: Response, save:Boolean=true, type:String=METAVERSE_INFO)
+    class Metaverse_INFO(response: Response, save:Boolean=true, type:String=METAVERSE_INFO)
+        : Parser(save, type, response)
+
+    class Metaverse_PRICES(response: Response, save:Boolean=true, type:String= METAVERSE_PRICE_INFO)
         : Parser(save, type, response)
 
     class GlewMe(response: Response, save:Boolean=true, type:String=GLEWME)
@@ -39,6 +43,7 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
     companion object {
         const val ALL_DATA_PACKAGES = "all_data_packages"
         const val METAVERSE_INFO = "meta_ticker_info"
+        const val METAVERSE_PRICE_INFO = "meta_price_info"
         const val GLEWME = "glewmetv"
         const val EVENTS = "events"
         const val HOOKUPS = "hookups"
@@ -51,12 +56,15 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
     var HookupList = mutableListOf<Hookup>()
     //-> Data Packages
     var MetaverseList = mutableListOf<io.aokihome.glewmetv.db.Metaverse>()
+    var PriceList = mutableListOf<Ticker>()
     var GlewMeList = mutableListOf<io.aokihome.glewmetv.db.GlewMe>()
+    var EventList = mutableListOf<io.aokihome.glewmetv.db.Event>()
 
     /** All Data Packages **/
     private fun initDataPackages(response: Response) {
         // GlewMe
         if (type == ALL_DATA_PACKAGES) {
+            packageParser(METAVERSE_PRICE_INFO, response)
             packageParser(GLEWME, response)
             packageParser(METAVERSE_INFO, response)
             packageParser(EVENTS, response)
@@ -71,6 +79,7 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
         when (type) {
             GLEWME -> glewme(key, this)
             METAVERSE_INFO -> metaverse(key, this)
+            METAVERSE_PRICE_INFO -> prices(this)
             EVENTS -> events(key, this)
         }
     }
@@ -79,34 +88,63 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
     private fun glewme(key: String, jsonObject: JSONObject?) {
         val glewMeObj = jsonObject?.toGlewMe(key)
         GlewMeList.add(glewMeObj ?: return)
-        if (save) addGlewMeToSessionOnMain(glewMeObj)
+//        main {
+//            if (save) addGlewMeToSession(glewMeObj)
+//        }
+
     }
 
     /** METAVERSE INFO Package **/
     private fun metaverse(key: String, jsonObject: JSONObject?) {
-        val metaObj = jsonObject?.toMetaverse(key)
-        MetaverseList.add(metaObj ?: return)
-        if (save) addMetaverseToSessionOnMain(metaObj)
+        try {
+            val metaObj = jsonObject?.toMetaverse(key)
+            MetaverseList.add(metaObj ?: return)
+//        if (save) addMetaverseToSession(metaObj)
+        } catch (e: Exception) {
+            println("!!!!Failed Parser().Metaverse(): $e")
+        }
+    }
+
+    /** METAVERSE PRICES Package **/
+    private fun prices(jsonObject: JSONObject?) {
+        val priceObj = jsonObject?.toTicker()
+        PriceList.add(priceObj ?: return)
+        println(PriceList)
+//        if (save) addMetaverseToSessionOnMain(metaObj)
     }
 
     /** Events Package **/
     private fun events(key: String, jsonObject: JSONObject?) {
-        println("coming soon... $key, $jsonObject")
+        val eventObj = jsonObject?.toEvent()
+        EventList.add(eventObj ?: return)
+        println(eventObj)
     }
 
     // Dynamic Package Parser
     private fun packageParser(type: String, response: Response) {
-        jsonObject = response.toJsonObject()
-        //-> Check if METAVERSE INFO exists.
-        jsonObject?.get(type)?.let {
-            val tempObj = it as? JSONObject
-            tempObj?.let {
-                for (key in it.keys()) {
-                    //parse
-                    val temp_obj = it.get(key) as? JSONObject
-                    temp_obj?.completePackage(type, key)
+        try {
+            jsonObject = response.toJsonObject()
+            //-> Check if METAVERSE INFO exists.
+            jsonObject?.get(type)?.let {
+                val tempObj = it as? JSONObject
+                tempObj?.let {
+                    for (key in it.keys()) {
+                        //parse
+                        val obj = it.get(key)
+                        if (type == EVENTS) {
+                            val temp = (obj as? JSONArray) ?: continue
+                            val event_list = toListOfJsonObjects(jsonArray = temp)
+                            for (item in event_list) {
+                                item.completePackage(type, key)
+                            }
+                            continue
+                        }
+                        (obj as? JSONObject)?.completePackage(type, key)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            println("!!!!Failed Parser().packageParser(): $e")
         }
     }
 
@@ -134,6 +172,26 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
                     val jsonObject = JSONObject(current_obj.toString())
                     tempList.add(jsonObject)
                     i++
+                } else {
+                    break
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            println("Couldn't parse object.")
+        }
+        return tempList
+    }
+
+    private fun toListOfJsonObjects(jsonArray: JSONArray) : List<JSONObject> {
+        val tempList = mutableListOf<JSONObject>()
+        try {
+            val condition = true
+            var i = 0
+            while (condition) {
+                if (jsonArray[i] != null) {
+                    val current_obj = jsonArray[i] as? JSONObject
+                    i++
+                    tempList.add(current_obj ?: continue)
                 } else {
                     break
                 }

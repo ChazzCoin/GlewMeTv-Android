@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="io.aokihome.glewmetv.ui.MainGlewMeTvActivity"
+            android:name="io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity"
             android:label="@string/title_activity_hookup">
         </activity>
     </application>

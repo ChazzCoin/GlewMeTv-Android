@@ -54,7 +54,7 @@ class TickerAdapter(): RecyclerView.Adapter<TickerAdapter.TickerViewHolder>() {
             } else {
                 textPrice.textColor = Color.RED
             }
-            textPrice.text = ticker.price
+            textPrice.text = "\$${ticker.price}"
         }
     }
 }

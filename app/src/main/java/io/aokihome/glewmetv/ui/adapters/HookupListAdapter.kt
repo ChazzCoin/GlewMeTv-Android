@@ -19,7 +19,7 @@ import com.squareup.picasso.Target
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.Hookup
 import io.aokihome.glewmetv.db.removeTopTen
-import io.aokihome.glewmetv.ui.MainGlewMeTvActivity
+import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
 import io.aokihome.glewmetv.ui.readHookupDialog
 import io.realm.RealmList
 
@@ -71,7 +71,7 @@ class HookupListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolea
         //-> LEFT (TO)
         val textTitle = itemView.findViewById<TextView>(R.id.txtTitle)
         val textRank = itemView.findViewById<TextView>(R.id.txtRank)
-        val textDate = itemView.findViewById<TextView>(R.id.txtDate)
+        val textDate = itemView.findViewById<TextView>(R.id.txtEventDate)
         val textSource = itemView.findViewById<TextView>(R.id.txtSource)
         val imgUrl = itemView.findViewById<ImageView>(R.id.imgUrl)
         val itemLinearLayout = itemView.findViewById<LinearLayout>(R.id.itemLinearLayout)

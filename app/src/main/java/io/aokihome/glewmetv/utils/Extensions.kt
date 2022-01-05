@@ -7,14 +7,25 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.aokihome.glewmetv.db.Event
 import io.aokihome.glewmetv.db.Hookup
 import io.aokihome.glewmetv.db.Ticker
-import io.aokihome.glewmetv.ui.MainGlewMeTvActivity
+import io.aokihome.glewmetv.ui.adapters.EventListAdapter
+import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
 import io.aokihome.glewmetv.ui.adapters.HookupListAdapter
 import io.aokihome.glewmetv.ui.adapters.TickerAdapter
 import io.realm.Realm
 import io.realm.RealmList
 import kotlinx.coroutines.*
+import java.lang.Exception
+
+inline fun tryCatch(block:() -> Unit) {
+    try {
+        block()
+    } catch (e: Exception) {
+        println("Safe Extension Caught Exception: $e")
+    }
+}
 
 
 inline fun main(crossinline block: suspend CoroutineScope.() -> Unit) {
@@ -46,12 +57,30 @@ fun RecyclerView.initHookups(listOfHookups: MutableList<Hookup>, isTopTen: Boole
     return hookupAdapter
 }
 
+fun RecyclerView.initEvents(listOfEvents: MutableList<Event>) : EventListAdapter {
+    val eventAdapter = EventListAdapter(context = MainGlewMeTvActivity.context, listOfEvents = listOfEvents)
+    this.layoutManager = LinearLayoutManager(MainGlewMeTvActivity.context, LinearLayoutManager.HORIZONTAL, false)
+    this.adapter = eventAdapter
+    eventAdapter.notifyDataSetChanged()
+    return eventAdapter
+}
+
 fun RecyclerView.initTickers(listOfTickers: MutableList<Ticker>) : TickerAdapter {
     val adapter = TickerAdapter()
     this.layoutManager = LinearLayoutManager(MainGlewMeTvActivity.context, LinearLayoutManager.HORIZONTAL, false)
     this.adapter = adapter
     adapter.addListOfTickers(listOfTickers)
     return adapter
+}
+
+fun <T> RealmList<T>?.toMutableList() : MutableList<T> {
+    val listOfT = mutableListOf<T>()
+    this?.let {
+        for (item in it) {
+            listOfT.add(item)
+        }
+    }
+    return listOfT
 }
 
 fun Any?.isNullOrEmpty() : Boolean {
