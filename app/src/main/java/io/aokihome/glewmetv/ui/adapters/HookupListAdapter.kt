@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
@@ -20,7 +22,7 @@ import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.Hookup
 import io.aokihome.glewmetv.db.removeTopTen
 import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
-import io.aokihome.glewmetv.ui.readHookupDialog
+import io.aokihome.glewmetv.ui.readArticleDialog
 import io.realm.RealmList
 
 
@@ -52,6 +54,7 @@ class HookupListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolea
         notifyDataSetChanged()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: HookupViewHolder, position: Int) {
         println("binding hookup")
         listOfHookups?.let { itHookups ->
@@ -60,7 +63,7 @@ class HookupListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolea
             holder.itemView.setOnClickListener {
                 context?.let {
                     println("HOOKUP CLICKED: starting dialog now!")
-                    readHookupDialog(it, itHookups[position]).show()
+                    readArticleDialog(it, itHookups[position]).show()
                 }
 
             }
@@ -70,8 +73,8 @@ class HookupListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolea
     class HookupViewHolder(convertView: View, val isTopTen: Boolean=false) : RecyclerView.ViewHolder(convertView) {
         //-> LEFT (TO)
         val textTitle = itemView.findViewById<TextView>(R.id.txtTitle)
-        val textRank = itemView.findViewById<TextView>(R.id.txtRank)
-        val textDate = itemView.findViewById<TextView>(R.id.txtEventDate)
+        val textRank = itemView.findViewById<TextView>(R.id.txtAuthor)
+        val textDate = itemView.findViewById<TextView>(R.id.txtPublishedDate)
         val textSource = itemView.findViewById<TextView>(R.id.txtSource)
         val imgUrl = itemView.findViewById<ImageView>(R.id.imgUrl)
         val itemLinearLayout = itemView.findViewById<LinearLayout>(R.id.itemLinearLayout)

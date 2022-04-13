@@ -37,19 +37,37 @@ class MetaReportFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        txtLoadOnMain("Initiating Session..." )
+        // WORKING! SEARCH!
+        btnSearch.setOnClickListener {
+            //make search!
+            toggleLoading(on = true)
+            val searchTerm = searchBox.text.toString()
+            if (!searchTerm.isNullOrEmpty()) {
+                io {
+                    val response = GmtHttpRequest().searchAsync(searchTerm).await()
+                    val arts = ArticleParser(response)
+                    listOfHookups.clear()
+                    for (item in arts) listOfHookups.add(item)
+                    main {
+                        setupHookupAdapter()
+                        println(arts)
+                    }
+                }
+                searchBox.setText("")
+                return@setOnClickListener
+            }
+
+        }
+
         session = Session.session
         session {
             if (!it.hookups.isNullOrEmpty()) {
                 listOfRealmHookups = it.hookups
-//                txtLoadOnMain("Setting Up Saved Hookups from Realm...")
                 setupRealmHookupAdapter()
             } else {
-//                txtLoadOnMain("Session found but no hookups, loading new hookups...")
                 runLoadHookupsAsync()
             }
         } ?: run {
-//            txtLoadOnMain("No session found, loading new hookups...")
             runLoadHookupsAsync()
         }
     }
@@ -57,6 +75,17 @@ class MetaReportFragment() : Fragment() {
     fun runLoadHookupsAsync() {
         io { loadHookups() }
     }
+
+    fun toggleLoading(on:Boolean) {
+        if (on) {
+            loadingProgressBar.visibility = View.VISIBLE
+            recyclerView.visibility = View.INVISIBLE
+        } else {
+            loadingProgressBar.visibility = View.INVISIBLE
+            recyclerView.visibility = View.VISIBLE
+        }
+    }
+
 
 //    private fun txtLoadOnMain(text:String) {
 //        main { txtLoad.text = text}
@@ -66,9 +95,11 @@ class MetaReportFragment() : Fragment() {
 //        txtLoadOnMain("Loading Hookups...")
         listOfHookups.clear()
         removeAllHookupsOnMain()
-        val response = GmtHttpRequest().getAsync(GmtHttpRequest.URL_HOOKUPS_DATA).await()
+        val response = GmtHttpRequest().getAsync(GmtHttpRequest.URL_ARTICLES_DATA).await()
 //        txtLoadOnMain("Parsing Hookups...")
-        Parser.Hookups(response)
+        ArticleParser(response)
+//        Parser.Hookups(response)
+
 //        txtLoadOnMain("Setting Up RecyclerView...")
         main { setupHookupAdapter() }
     }
@@ -80,6 +111,7 @@ class MetaReportFragment() : Fragment() {
         recyclerView.adapter = hookupAdapter
         hookupAdapter?.notifyDataSetChanged()
         showSuccess("New Hookups Loaded from Server!", MainGlewMeTvActivity.context)
+        toggleLoading(on = false)
     }
 
     private fun setupRealmHookupAdapter() {
@@ -91,6 +123,7 @@ class MetaReportFragment() : Fragment() {
         recyclerView.adapter = hookupAdapter
         hookupAdapter?.notifyDataSetChanged()
         showSuccess("Realm Hookups Loaded!", MainGlewMeTvActivity.context)
+        toggleLoading(on = false)
     }
 
 }

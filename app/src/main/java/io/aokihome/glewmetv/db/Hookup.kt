@@ -53,7 +53,7 @@ fun JSONObject.toHookup() : Hookup {
     hookup.body = getSafeString("body").trim()
     hookup.published_date = getSafeString("published_date")
     hookup.url = getSafeString("url")
-    hookup.imgUrl = getSafeString("img_url")
+    hookup.imgUrl = getSafeString("img_url", default = getSafeString("imgUrl"))
     hookup.source = getSafeString("source")
     hookup.source_rank = getSafeString("source_rank")
     hookup.category = getSafeString("category")

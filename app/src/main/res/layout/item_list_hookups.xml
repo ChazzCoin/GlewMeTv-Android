@@ -80,7 +80,7 @@
                             android:textColor="@color/colorAccent" />
 
                         <TextView
-                            android:id="@+id/txtRank"
+                            android:id="@+id/txtAuthor"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="bottom"
@@ -98,7 +98,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/txtEventDate"
+                            android:id="@+id/txtPublishedDate"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="2dp"

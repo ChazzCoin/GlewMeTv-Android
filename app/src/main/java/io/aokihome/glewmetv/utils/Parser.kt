@@ -247,11 +247,11 @@ fun JSONObject.getDeepKey(key: String): Any? {
 }
 
 
-fun JSONObject.getSafeString(obj: String) : String {
+fun JSONObject.getSafeString(obj: String, default:String="") : String {
     if (this.has(obj)) {
         return this.getString(obj)
     }
-    return ""
+    return default
 }
 
 fun JSONObject.getSafeDouble(obj: String) : Double {

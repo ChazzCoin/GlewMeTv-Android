@@ -44,9 +44,9 @@ class DashboardFragment : Fragment() {
 //                for (item in it) {
 //                    listOfTickers.add(item)
 //                }
-                initTickers()
-                initEvents()
-                initTopTen()
+//                initTickers()
+//                initEvents()
+//                initTopTen()
             }
 
         }
@@ -54,9 +54,9 @@ class DashboardFragment : Fragment() {
             loadGlewMeTvData()
             println(listOfTickers)
             main {
-                initTickers()
-                initEvents()
-                initTopTen()
+//                initTickers()
+//                initEvents()
+//                initTopTen()
             }
         }
 
@@ -64,7 +64,7 @@ class DashboardFragment : Fragment() {
 
     private suspend fun loadGlewMeTvData() {
         val response = GmtHttpRequest().getAsync(GmtHttpRequest.URL_GLEWMETV_DATA).await()
-        val responseTwo = GmtHttpRequest().getAsync(GmtHttpRequest.URL_HOOKUPS_DATA).await()
+        val responseTwo = GmtHttpRequest().getAsync(GmtHttpRequest.URL_ARTICLES_DATA).await()
         val parsedPackages = Parser.AllDataPackages(response)
         val parsedHookups = Parser.Hookups(responseTwo)
         println(parsedPackages)
