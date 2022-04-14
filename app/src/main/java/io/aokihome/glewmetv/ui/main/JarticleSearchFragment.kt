@@ -86,6 +86,7 @@ class JarticleSearchFragment() : Fragment() {
         val searchTerm = searchBox.text.toString()
         if (!searchTerm.isNullOrEmpty()) {
             toggleLoading(on = true)
+            clearRecyclerView()
             io {
                 val response = GmtHttpRequest().searchAsync(searchTerm).await()
                 val arts = ArticleParser(response)
@@ -128,8 +129,17 @@ class JarticleSearchFragment() : Fragment() {
         val response = GmtHttpRequest().getAsync(GmtHttpRequest.URL_ARTICLES_DATA).await()
         main {
             setLockedArticlesFromDB(response)
-            recyclerView.visibility = View.VISIBLE
-            setupArticleAdapter() }
+            setupArticleAdapter()
+        }
+    }
+
+    private fun clearRecyclerView() {
+        lockedListOfArticles = null
+        val emptyList = mutableListOf<Article>()
+        recyclerView.initArticles(emptyList)
+        txtOverallArticleCount.text = "0 Total Articles"
+        txtArticleCount.text = "0 in list"
+        recyclerView.visibility = View.INVISIBLE
     }
 
     private fun setupArticleAdapter(articles: MutableList<Article>? = lockedListOfArticles?.toMutableList()) {

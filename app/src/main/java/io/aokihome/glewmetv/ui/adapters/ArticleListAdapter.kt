@@ -38,6 +38,12 @@ class ArticleListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boole
         return listOfArticles?.size ?: 0
     }
 
+    fun destroyThySelf() {
+        val size = listOfArticles?.size
+        listOfArticles?.clear()
+        notifyItemRangeRemoved(0, size ?: 0);
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         println("binding hookup")
