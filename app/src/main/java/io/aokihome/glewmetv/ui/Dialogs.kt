@@ -9,20 +9,20 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import com.squareup.picasso.Picasso
 import io.aokihome.glewmetv.R
-import io.aokihome.glewmetv.db.Hookup
+import io.aokihome.glewmetv.db.Article
 import kotlinx.android.synthetic.main.dialog_hookup_details.*
 import kotlinx.android.synthetic.main.dialog_hookup_details.txtAuthor
 import kotlinx.android.synthetic.main.read_article.*
 
 
 @RequiresApi(Build.VERSION_CODES.N)
-fun readArticleDialog(activity: Activity, hookup: Hookup?) : Dialog {
+fun readArticleDialog(activity: Activity, article: Article?) : Dialog {
     val dialog = Dialog(activity)
     dialog.setContentView(R.layout.read_article)
     dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
     dialog.window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
-    hookup?.let {
+    article?.let {
         dialog.txtTitle.isClickable = true
         dialog.txtTitle.movementMethod = LinkMovementMethod.getInstance()
         val text = "<a href='${it.url}'> ${it.title} </a>"
@@ -43,13 +43,13 @@ fun readArticleDialog(activity: Activity, hookup: Hookup?) : Dialog {
     return dialog
 }
 
-fun readHookupDialog(activity: Activity, hookup: Hookup?) : Dialog {
+fun readHookupDialog(activity: Activity, article: Article?) : Dialog {
     val dialog = Dialog(activity)
     dialog.setContentView(R.layout.dialog_hookup_details)
     dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
     dialog.window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
-    hookup?.let {
+    article?.let {
         dialog.txtHeader.text = it.title
         dialog.txtAuthor.text = "Rank: ${it.rank}"
         dialog.txtUrl.text = it.url

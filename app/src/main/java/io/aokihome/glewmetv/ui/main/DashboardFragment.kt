@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.*
 import io.aokihome.glewmetv.http.GmtHttpRequest
-import io.aokihome.glewmetv.ui.adapters.HookupListAdapter
 import io.aokihome.glewmetv.ui.adapters.TickerAdapter
 import io.aokihome.glewmetv.utils.*
 import io.realm.RealmList
@@ -19,10 +18,10 @@ import kotlinx.android.synthetic.main.fragment_dashboard.*
  */
 class DashboardFragment : Fragment() {
 
-    var hookupAdapter: HookupListAdapter? = null
-    var listOfRealmHookups: RealmList<Hookup>? = null
+//    var hookupAdapter: HookupListAdapter? = null
+    var listOfRealmArticles: RealmList<Article>? = null
     var listOfRealmTickers: RealmList<Ticker>? = null
-    var listOfHookups = mutableListOf<Hookup>()
+    var listOfHookups = mutableListOf<Article>()
     var listOfEvents = mutableListOf<Event>()
 
     var listOfTickers = mutableListOf<Ticker>()
@@ -82,11 +81,11 @@ class DashboardFragment : Fragment() {
         var adapter = recyclerLiveEvents.initEvents(listOfEvents)
     }
 
-    private fun initTopTen() {
-        listOfHookups = getHookupsList()
-        listOfHookups.prepHookupsForDisplay()
-        listOfHookups = listOfHookups.topTen()
-        hookupAdapter = recyclerHeadlines.initHookups(listOfHookups, true)
-    }
+//    private fun initTopTen() {
+//        listOfHookups = getHookupsList()
+//        listOfHookups.prepHookupsForDisplay()
+//        listOfHookups = listOfHookups.topTen()
+//        hookupAdapter = recyclerHeadlines.initHookups(listOfHookups, true)
+//    }
 
 }

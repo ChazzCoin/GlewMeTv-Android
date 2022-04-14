@@ -1,7 +1,6 @@
 package io.aokihome.glewmetv.utils
 
 import com.github.kittinunf.fuel.core.Response
-import com.google.gson.JsonObject
 import io.aokihome.glewmetv.db.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -53,7 +52,7 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
     lateinit var masterResponse: Response
     var jsonObject: JSONObject?=null
     //-> Hookups
-    var HookupList = mutableListOf<Hookup>()
+    var HookupList = mutableListOf<Article>()
     //-> Data Packages
     var MetaverseList = mutableListOf<io.aokihome.glewmetv.db.Metaverse>()
     var PriceList = mutableListOf<Ticker>()
@@ -153,9 +152,9 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
         masterResponse = response
         val hookupList = toListOfJsonObjects(response)
         for (item in hookupList) {
-            val tempHookup = item.toHookup()
+            val tempHookup = item.toArticle()
             HookupList.add(tempHookup)
-            if (save) addHookupToSessionOnMain(tempHookup)
+            if (save) addArticleToSessionOnMain(tempHookup)
         }
     }
 

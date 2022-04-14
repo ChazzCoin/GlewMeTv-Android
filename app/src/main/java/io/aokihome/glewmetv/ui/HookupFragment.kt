@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.aokihome.glewmetv.R
-import io.aokihome.glewmetv.db.Hookup
+import io.aokihome.glewmetv.db.Article
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -14,9 +14,9 @@ import io.aokihome.glewmetv.db.Hookup
 class HookupFragment : Fragment() {
 
     companion object {
-        var staticHookup: Hookup? = null
+        var staticArticle: Article? = null
     }
-    var hookup: Hookup? = null
+    var article: Article? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
 

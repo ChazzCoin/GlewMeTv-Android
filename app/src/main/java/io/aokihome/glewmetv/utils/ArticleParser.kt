@@ -1,19 +1,18 @@
 package io.aokihome.glewmetv.utils
 
 import com.github.kittinunf.fuel.core.Response
-import io.aokihome.glewmetv.db.Hookup
-import io.aokihome.glewmetv.db.addHookupToSessionOnMain
-import io.aokihome.glewmetv.db.toHookup
+import io.aokihome.glewmetv.db.Article
+import io.aokihome.glewmetv.db.toArticle
 import org.json.JSONArray
 import org.json.JSONObject
 
-var articleList = mutableListOf<Hookup>()
+var articleList = mutableListOf<Article>()
 
 /** HOOKUPS **/
-fun ArticleParser(response: Response): MutableList<Hookup> {
+fun ArticleParser(response: Response): MutableList<Article> {
     val hookupList = toListOfJsonObjects(response)
     for (item in hookupList) {
-        val tempHookup = item.toHookup()
+        val tempHookup = item.toArticle()
         articleList.add(tempHookup)
 //        addHookupToSessionOnMain(tempHookup)
     }

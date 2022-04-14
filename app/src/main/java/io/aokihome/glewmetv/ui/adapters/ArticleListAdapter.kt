@@ -19,45 +19,44 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
 import io.aokihome.glewmetv.R
-import io.aokihome.glewmetv.db.Hookup
-import io.aokihome.glewmetv.db.removeTopTen
+import io.aokihome.glewmetv.db.Article
 import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
 import io.aokihome.glewmetv.ui.readArticleDialog
 import io.realm.RealmList
 
 
-class HookupListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolean=false, var listOfHookups: MutableList<Hookup>? = null):
-        RecyclerView.Adapter<HookupListAdapter.HookupViewHolder>() {
+class ArticleListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolean=false, var listOfArticles: MutableList<Article>? = null):
+        RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HookupViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
 
-        if (isTopTen) {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_headline, parent, false)
-            return HookupViewHolder(convertView = view)
-        }
-        listOfHookups = listOfHookups?.removeTopTen()
+//        if (isTopTen) {
+//            val view = LayoutInflater.from(parent.context)
+//                .inflate(R.layout.item_headline, parent, false)
+//            return HookupViewHolder(convertView = view)
+//        }
+//        listOfHookups = listOfHookups?.removeTopTen()
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_list_hookups2, parent, false)
-        return HookupViewHolder(convertView = view)
+        return ArticleViewHolder(convertView = view)
     }
 
     override fun getItemCount(): Int {
-        return listOfHookups?.size ?: 0
+        return listOfArticles?.size ?: 0
     }
 
-    fun loadRealmHookups(newRealmHookups: RealmList<Hookup>) {
-        listOfHookups?.clear()
-        for (item in newRealmHookups) {
-            listOfHookups?.add(item)
+    fun loadRealmHookups(newRealmArticles: RealmList<Article>) {
+        listOfArticles?.clear()
+        for (item in newRealmArticles) {
+            listOfArticles?.add(item)
         }
         notifyDataSetChanged()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onBindViewHolder(holder: HookupViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         println("binding hookup")
-        listOfHookups?.let { itHookups ->
+        listOfArticles?.let { itHookups ->
             holder.bind(itHookups[position])
             //onClickListener
             holder.itemView.setOnClickListener {
@@ -70,27 +69,27 @@ class HookupListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolea
         }
     }
 
-    class HookupViewHolder(convertView: View, val isTopTen: Boolean=false) : RecyclerView.ViewHolder(convertView) {
+    class ArticleViewHolder(convertView: View, val isTopTen: Boolean=false) : RecyclerView.ViewHolder(convertView) {
         //-> LEFT (TO)
         val textTitle = itemView.findViewById<TextView>(R.id.txtTitle)
         val textDate = itemView.findViewById<TextView>(R.id.txtPublishedDate)
         val textSource = itemView.findViewById<TextView>(R.id.txtSource)
         val imgUrl = itemView.findViewById<ImageView>(R.id.imgUrl)
 
-        fun bind(hookup: Hookup) {
+        fun bind(article: Article) {
 
-            val sour = hookup.source.toString()
+            val sour = article.source.toString()
             if (sour.contains("twitter")) {
-                textTitle.text = hookup.body
+                textTitle.text = article.body
             } else {
-                textTitle.text = hookup.title
+                textTitle.text = article.title
             }
 
             textSource.text = sour
-            textDate.text = hookup.published_date
-            if (hookup.imgUrl.isNotEmpty()) {
+            textDate.text = article.published_date
+            if (article.imgUrl.isNotEmpty()) {
                 try {
-                    Picasso.get().load(hookup.imgUrl).fit().into(imgUrl)
+                    Picasso.get().load(article.imgUrl).fit().into(imgUrl)
                 } catch (e: Exception) {
                     imgUrl.visibility = View.GONE
                     println("Failed to load image: $e")

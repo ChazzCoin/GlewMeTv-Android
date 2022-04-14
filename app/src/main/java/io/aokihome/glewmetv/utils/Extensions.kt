@@ -1,18 +1,22 @@
 package io.aokihome.glewmetv.utils
 
+import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.aokihome.glewmetv.db.Event
-import io.aokihome.glewmetv.db.Hookup
+import io.aokihome.glewmetv.db.Article
 import io.aokihome.glewmetv.db.Ticker
 import io.aokihome.glewmetv.ui.adapters.EventListAdapter
 import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
-import io.aokihome.glewmetv.ui.adapters.HookupListAdapter
+import io.aokihome.glewmetv.ui.adapters.ArticleListAdapter
 import io.aokihome.glewmetv.ui.adapters.TickerAdapter
 import io.realm.Realm
 import io.realm.RealmList
@@ -46,14 +50,13 @@ suspend inline fun await(crossinline block: suspend CoroutineScope.() -> Unit) {
     }.await()
 }
 
-fun RecyclerView.initHookups(listOfHookups: MutableList<Hookup>, isTopTen: Boolean = false) : HookupListAdapter {
-    val hookupAdapter = HookupListAdapter(context = MainGlewMeTvActivity.context, isTopTen = isTopTen, listOfHookups = listOfHookups)
+fun RecyclerView.initArticles(listOfArticles: MutableList<Article>, isTopTen: Boolean = false) : ArticleListAdapter {
+    val hookupAdapter = ArticleListAdapter(context = MainGlewMeTvActivity.context, isTopTen = isTopTen, listOfArticles = listOfArticles)
     this.layoutManager = LinearLayoutManager(
             MainGlewMeTvActivity.context,
             if (isTopTen) LinearLayoutManager.HORIZONTAL else LinearLayoutManager.VERTICAL,
             false)
     this.adapter = hookupAdapter
-    hookupAdapter.notifyDataSetChanged()
     return hookupAdapter
 }
 
@@ -61,7 +64,6 @@ fun RecyclerView.initEvents(listOfEvents: MutableList<Event>) : EventListAdapter
     val eventAdapter = EventListAdapter(context = MainGlewMeTvActivity.context, listOfEvents = listOfEvents)
     this.layoutManager = LinearLayoutManager(MainGlewMeTvActivity.context, LinearLayoutManager.HORIZONTAL, false)
     this.adapter = eventAdapter
-    eventAdapter.notifyDataSetChanged()
     return eventAdapter
 }
 
@@ -71,6 +73,19 @@ fun RecyclerView.initTickers(listOfTickers: MutableList<Ticker>) : TickerAdapter
     this.adapter = adapter
     adapter.addListOfTickers(listOfTickers)
     return adapter
+}
+
+fun Fragment.hideKeyboard() {
+    view?.let { activity?.hideKeyboard(it) }
+}
+
+fun Activity.hideKeyboard() {
+    hideKeyboard(currentFocus ?: View(this))
+}
+
+fun Context.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
 fun <T> RealmList<T>?.toMutableList() : MutableList<T> {
@@ -128,7 +143,13 @@ fun showSuccess(mess: String = "Success!", context: Context? = null) {
         }
     } ?: run { Toast.makeText(context, mess, Toast.LENGTH_SHORT).show() }
 }
-
+fun toast(mess: String = "Uh OH!", context: Context? = null) {
+    context?.let {
+        MainGlewMeTvActivity.context?.let {
+            Toast.makeText(it, mess, Toast.LENGTH_SHORT).show()
+        }
+    } ?: run { Toast.makeText(context, mess, Toast.LENGTH_SHORT).show() }
+}
 
 
 /**

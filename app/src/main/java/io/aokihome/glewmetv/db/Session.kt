@@ -7,7 +7,6 @@ import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import org.json.JSONArray
 import org.json.JSONObject
 
 /**
@@ -18,13 +17,13 @@ open class Session : RealmObject() {
     @PrimaryKey
     var sessionId = 1
 
-    var hookups : RealmList<Hookup>? = RealmList()
+    var articles : RealmList<Article>? = RealmList()
     var tickers : RealmList<Ticker>? = RealmList()
     var metaverses : RealmList<Metaverse>? = RealmList()
     var glewmes : RealmList<GlewMe>? = RealmList()
 
     init {
-        hookups = RealmList<Hookup>()
+        articles = RealmList<Article>()
         tickers = RealmList<Ticker>()
         metaverses = RealmList()
         glewmes = RealmList()
@@ -58,16 +57,16 @@ open class Session : RealmObject() {
     }
 }
 
-fun getHookups() : RealmList<Hookup>? {
-    return session()?.hookups
+fun getHookups() : RealmList<Article>? {
+    return session()?.articles
 }
 
-fun getHookupsList() : MutableList<Hookup> {
+fun getHookupsList() : MutableList<Article> {
     return getHookups().convertRealmListToList()
 }
 
-fun RealmList<Hookup>?.convertRealmListToList() : MutableList<Hookup> {
-    val tempList = mutableListOf<Hookup>()
+fun RealmList<Article>?.convertRealmListToList() : MutableList<Article> {
+    val tempList = mutableListOf<Article>()
     this?.let {
         for (item in it) {
             tempList.add(item)
@@ -76,19 +75,19 @@ fun RealmList<Hookup>?.convertRealmListToList() : MutableList<Hookup> {
     return tempList
 }
 
-fun MutableList<Hookup>.prepHookupsForDisplay() {
+fun MutableList<Article>.prepHookupsForDisplay() {
     this.distinct().toList() // Remove any Duplicates
     this.sortBy { it.rank }  // Sort by Rank
     this.reversed()          // Reverse order, rank 1 will be at the bottom otherwise.
 }
 
-fun MutableList<Hookup>.topTen(): MutableList<Hookup> {
+fun MutableList<Article>.topTen(): MutableList<Article> {
     val listCount = this.count()
     val highest = if (listCount < 10) listCount else 10
     return this.subList(0, highest)       // Reverse order, rank 1 will be at the bottom otherwise.
 }
 
-fun MutableList<Hookup>.removeTopTen(): MutableList<Hookup> {
+fun MutableList<Article>.removeTopTen(): MutableList<Article> {
     val listCount = this.count()
     if (listCount <= 10) return this
     val highest = if (listCount < 10) listCount else 10
@@ -108,11 +107,11 @@ fun session(): Session? {
 }
 
 /** -> Hookups <- **/
-fun addHookupToSessionOnMain(hookup: Hookup) {
+fun addArticleToSessionOnMain(article: Article) {
     val session = Session.session
     executeRealmOnMain { itRealm ->
         if (session != null) {
-            session.hookups?.add(hookup)
+            session.articles?.add(article)
             itRealm.copyToRealmOrUpdate(session) }
     }
 }
@@ -185,7 +184,7 @@ fun saveSessionOnMain() {
 fun removeAllHookupsOnMain() {
     val session = Session.session
     executeRealmOnMain {
-        session?.hookups?.clear()
+        session?.articles?.clear()
     }
 }
 
@@ -205,7 +204,7 @@ fun removeAllTickersOnMain() {
 
 fun createHookupObjectOnMain(obj: JSONObject) {
     executeRealmOnMain { itRealm ->
-        itRealm.createObjectFromJson(Hookup::class.java, obj)
+        itRealm.createObjectFromJson(Article::class.java, obj)
     }
 }
 

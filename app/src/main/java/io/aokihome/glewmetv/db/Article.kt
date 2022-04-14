@@ -1,14 +1,12 @@
 package io.aokihome.glewmetv.db
 
 import com.github.kittinunf.fuel.core.Response
-import io.aokihome.glewmetv.http.GmtHttpRequest
 import io.aokihome.glewmetv.utils.getSafeDouble
 import io.aokihome.glewmetv.utils.getSafeString
 import io.realm.RealmObject
-import org.json.JSONArray
 import org.json.JSONObject
 
-open class Hookup : RealmObject() {
+open class Article : RealmObject() {
 
     var id: String = ""
     var author: String = ""
@@ -29,7 +27,7 @@ open class Hookup : RealmObject() {
     var rank: Double = 0.0
 }
 
-fun MutableList<Hookup>.filterOutSource(source:String) {
+fun MutableList<Article>.filterOutSource(source:String) {
     this.filter { it.source.toString().contains(source) }
 }
 
@@ -43,8 +41,8 @@ fun Response.toJsonObject() : JSONObject? {
     return null
 }
 
-fun JSONObject.toHookup() : Hookup {
-    val hookup = Hookup()
+fun JSONObject.toArticle() : Article {
+    val hookup = Article()
     hookup.id = getSafeString("id")
     hookup.author = getSafeString("author")
     hookup.author = getSafeString("author")
