@@ -29,13 +29,6 @@ class ArticleListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boole
         RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
-
-//        if (isTopTen) {
-//            val view = LayoutInflater.from(parent.context)
-//                .inflate(R.layout.item_headline, parent, false)
-//            return HookupViewHolder(convertView = view)
-//        }
-//        listOfHookups = listOfHookups?.removeTopTen()
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_list_hookups2, parent, false)
         return ArticleViewHolder(convertView = view)
@@ -43,14 +36,6 @@ class ArticleListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boole
 
     override fun getItemCount(): Int {
         return listOfArticles?.size ?: 0
-    }
-
-    fun loadRealmHookups(newRealmArticles: RealmList<Article>) {
-        listOfArticles?.clear()
-        for (item in newRealmArticles) {
-            listOfArticles?.add(item)
-        }
-        notifyDataSetChanged()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -79,7 +64,7 @@ class ArticleListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boole
         fun bind(article: Article) {
 
             val sour = article.source.toString()
-            if (sour.contains("twitter")) {
+            if (sour.contains("twitter", ignoreCase = true)) {
                 textTitle.text = article.body
             } else {
                 textTitle.text = article.title

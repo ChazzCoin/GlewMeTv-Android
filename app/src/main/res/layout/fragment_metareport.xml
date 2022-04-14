@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MetaReportFragment">
+    tools:context=".ui.main.JarticleSearchFragment">
 
     <ProgressBar
         android:id="@+id/loadingProgressBar"
@@ -27,11 +27,13 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="50dp"
-        android:background="@drawable/border_shadow"
+        android:background="@drawable/border_shadow_white"
         android:ems="10"
         android:hint="search articles"
         android:inputType="textPersonName"
         android:paddingLeft="10dp"
+        android:textColor="@color/darkPurple"
+        android:textColorHint="@color/darkPurple"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -42,7 +44,8 @@
         android:id="@+id/btnSearchIcon"
         android:layout_width="29dp"
         android:layout_height="0dp"
-        android:background="@color/colorAccent"
+        android:layout_margin=".5dp"
+        android:background="@drawable/border_shadow_accent"
         android:src="?android:attr/actionModeWebSearchDrawable"
         app:layout_constraintBottom_toBottomOf="@+id/searchBox"
         app:layout_constraintEnd_toEndOf="@+id/searchBox"
@@ -54,6 +57,7 @@
         android:layout_height="40dp"
         android:text="Search List"
         android:textSize="12sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.191"
@@ -63,50 +67,74 @@
 
     <Button
         android:id="@+id/btnLatest"
-        android:layout_width="wrap_content"
+        android:layout_width="115dp"
         android:layout_height="40dp"
-        android:layout_marginTop="12dp"
-        android:text="Latest from Server"
+        android:text="Latest"
         android:textSize="12sp"
+        android:visibility="gone"
         app:icon="@android:drawable/stat_sys_download"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.92"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnResetList" />
+        tools:layout_editor_absoluteX="126dp"
+        tools:layout_editor_absoluteY="94dp" />
 
     <Button
         android:id="@+id/btnResetList"
-        android:layout_width="wrap_content"
+        android:layout_width="115dp"
         android:layout_height="40dp"
-        android:text="Reset Articles"
+        android:text="Reset"
         android:textSize="12sp"
+        android:visibility="gone"
+        app:icon="@android:drawable/stat_notify_sync"
+        app:layout_constraintTop_toBottomOf="@+id/searchBox"
+        tools:layout_editor_absoluteX="106dp" />
+
+    <ImageButton
+        android:id="@+id/btnImgRevert"
+        style="@android:style/Widget.Holo.ImageButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="9dp"
+        android:background="@drawable/border_shadow_accent"
+        android:src="@android:drawable/ic_menu_revert"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.289"
-        app:layout_constraintStart_toEndOf="@+id/btnSearch"
+        app:layout_constraintTop_toBottomOf="@+id/btnSearchIcon" />
+
+    <ImageButton
+        android:id="@+id/btnImgDownload"
+        style="@android:style/Widget.Holo.ImageButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="9dp"
+        android:background="@drawable/border_shadow_accent"
+        android:src="@android:drawable/stat_sys_download"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toStartOf="@+id/btnImgRevert"
+        app:layout_constraintTop_toBottomOf="@+id/searchBox" />
+
+    <TextView
+        android:id="@+id/txtOverallArticleCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:text="0 Total Articles"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchBox" />
 
     <TextView
         android:id="@+id/txtArticleCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:layout_marginStart="48dp"
         android:text="0 in list"
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-        app:layout_constraintEnd_toStartOf="@+id/btnLatest"
-        app:layout_constraintHorizontal_bias="0.362"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/txtOverallArticleCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0 Total Articles"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/txtArticleCount"
-        app:layout_constraintEnd_toStartOf="@+id/btnLatest"
-        app:layout_constraintHorizontal_bias="0.283"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtOverallArticleCount" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -119,6 +147,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLatest" />
+        app:layout_constraintTop_toBottomOf="@+id/txtArticleCount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

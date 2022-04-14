@@ -1,6 +1,7 @@
 package io.aokihome.glewmetv.ui.main
 
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,7 @@ import kotlinx.coroutines.SupervisorJob
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class MetaReportFragment() : Fragment() {
+class JarticleSearchFragment() : Fragment() {
     var session: Session? = null
 
     var articleAdapter: ArticleListAdapter? = null
@@ -39,26 +40,34 @@ class MetaReportFragment() : Fragment() {
             hideKeyboard()
             this.externalSearchArticlesAsync()
         }
-        btnLatest.setOnClickListener {
+        btnImgDownload.setOnClickListener {
             hideKeyboard()
             runLoadLatestArticlesAsync()
         }
 
-        btnSearch.setOnClickListener {
-            hideKeyboard()
-            val searchTerm = searchBox.text.toString()
-            internalSearchArticles(searchTerm = searchTerm)
-            searchBox.setText("")
+        searchBox.afterTextChanged {
+            internalSearchArticles(it)
         }
 
-        btnResetList.setOnClickListener {
+        btnImgRevert.setOnClickListener {
             hideKeyboard()
+            searchBox.setText("")
             setupArticleAdapter()
         }
+
+        searchBox.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                //Perform Code
+                hideKeyboard()
+                return@OnKeyListener true
+            }
+            false
+        })
 
     }
 
     private fun internalSearchArticles(searchTerm: String) {
+        if (lockedListOfArticles.isNullOrEmpty()) return
         val temp = lockedListOfArticles?.toMutableList()
         temp?.let { itTemp ->
             filteredList = itTemp.filter {
@@ -74,9 +83,9 @@ class MetaReportFragment() : Fragment() {
 
     private fun externalSearchArticlesAsync() {
         //make search!
-        toggleLoading(on = true)
         val searchTerm = searchBox.text.toString()
         if (!searchTerm.isNullOrEmpty()) {
+            toggleLoading(on = true)
             io {
                 val response = GmtHttpRequest().searchAsync(searchTerm).await()
                 val arts = ArticleParser(response)
@@ -133,12 +142,11 @@ class MetaReportFragment() : Fragment() {
                 val onlyOneHundredList = it.subList(0, if (lastIndex > 500) 500 else lastIndex )
                 articleAdapter = recyclerView.initArticles(onlyOneHundredList)
                 txtArticleCount.text = "${onlyOneHundredList.size} in list"
-                showSuccess("New Articles Loaded from Server!", MainGlewMeTvActivity.context)
                 toggleLoading(on = false)
                 return
             }
         }
-        toast("Article list is empty!", MainGlewMeTvActivity.context)
+//        toast("No Articles!", MainGlewMeTvActivity.context)
     }
 
 }

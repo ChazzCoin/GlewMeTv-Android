@@ -8,7 +8,7 @@
     <item
         android:id="@+id/navigation_hookup_list"
         android:icon="@drawable/f_truck_dark"
-        android:title="Weekly" />
+        android:title="Jarticle" />
     <item
         android:id="@+id/navigation_dashboard"
         android:icon="@drawable/f_truck_dark"
