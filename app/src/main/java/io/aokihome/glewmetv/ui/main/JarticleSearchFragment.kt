@@ -2,16 +2,17 @@ package io.aokihome.glewmetv.ui.main
 
 import android.os.Bundle
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
+import androidx.fragment.app.Fragment
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.*
 import io.aokihome.glewmetv.http.GmtHttpRequest
-import io.aokihome.glewmetv.utils.*
 import io.aokihome.glewmetv.ui.adapters.ArticleListAdapter
-import kotlinx.android.synthetic.main.fragment_metareport.*
+import io.aokihome.glewmetv.utils.*
+import kotlinx.android.synthetic.main.fragment_jarticle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -29,7 +30,7 @@ class JarticleSearchFragment() : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_metareport, container, false)
+        return inflater.inflate(R.layout.fragment_jarticle, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,6 +47,7 @@ class JarticleSearchFragment() : Fragment() {
         }
 
         searchBox.afterTextChanged {
+            if (it.length < 2) return@afterTextChanged
             internalSearchArticles(it)
         }
 
@@ -69,15 +71,7 @@ class JarticleSearchFragment() : Fragment() {
     private fun internalSearchArticles(searchTerm: String) {
         if (lockedListOfArticles.isNullOrEmpty()) return
         val temp = lockedListOfArticles?.toMutableList()
-        temp?.let { itTemp ->
-            filteredList = itTemp.filter {
-                it.title.contains(searchTerm, ignoreCase = true) ||
-                        it.body.contains(searchTerm, ignoreCase = true) ||
-                        it.description.contains(searchTerm, ignoreCase = true) ||
-                        it.published_date?.contains(searchTerm, ignoreCase = true) ?: false
-            } as MutableList<Article>
-        }
-
+        filteredList = temp.search(searchTerm)
         setupArticleAdapter(filteredList.toMutableList())
     }
 
@@ -136,7 +130,7 @@ class JarticleSearchFragment() : Fragment() {
     private fun clearRecyclerView() {
         lockedListOfArticles = null
         val emptyList = mutableListOf<Article>()
-        recyclerView.initArticles(emptyList)
+        recyclerView.initArticles(emptyList, fragmentActivity = this.requireActivity())
         txtOverallArticleCount.text = "0 Total Articles"
         txtArticleCount.text = "0 in list"
         recyclerView.visibility = View.INVISIBLE
@@ -148,10 +142,11 @@ class JarticleSearchFragment() : Fragment() {
             if (it.isNotEmpty() && it.size > 0) {
                 articleAdapter = null
                 // only 100
-                val lastIndex = it.indices.last
-                val onlyOneHundredList = it.subList(0, if (lastIndex > 500) 500 else lastIndex )
-                articleAdapter = recyclerView.initArticles(onlyOneHundredList)
-                txtArticleCount.text = "${onlyOneHundredList.size} in list"
+//                val lastIndex = it.indices.last
+//                val onlyOneHundredList = it.subList(0, if (lastIndex > 500) 500 else lastIndex )
+                it.shuffle()
+                articleAdapter = recyclerView.initArticles(it, fragmentActivity = this.requireActivity())
+                txtArticleCount.text = "${it.size} in list"
                 toggleLoading(on = false)
                 return
             }

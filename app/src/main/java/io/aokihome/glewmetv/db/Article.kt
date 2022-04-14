@@ -1,10 +1,15 @@
 package io.aokihome.glewmetv.db
 
+import android.app.Activity
+import android.content.Context
 import com.github.kittinunf.fuel.core.Response
+import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
+import io.aokihome.glewmetv.ui.readArticleDialog
 import io.aokihome.glewmetv.utils.getSafeDouble
 import io.aokihome.glewmetv.utils.getSafeString
 import io.realm.RealmObject
 import org.json.JSONObject
+import java.security.AccessControlContext
 
 open class Article : RealmObject() {
 
@@ -27,8 +32,21 @@ open class Article : RealmObject() {
     var rank: Double = 0.0
 }
 
+fun Article.openArticle(activity: Activity?=MainGlewMeTvActivity.context) {
+    readArticleDialog(activity ?: return, this).show()
+}
+
 fun MutableList<Article>.filterOutSource(source:String) {
     this.filter { it.source.toString().contains(source) }
+}
+
+fun MutableList<Article>?.search(searchTerm:String): MutableList<Article> {
+    return this?.filter {
+        it.title.contains(searchTerm, ignoreCase = true) ||
+                it.body.contains(searchTerm, ignoreCase = true) ||
+                it.description.contains(searchTerm, ignoreCase = true) ||
+                it.published_date?.contains(searchTerm, ignoreCase = true) ?: false
+    } as MutableList<Article>
 }
 
 fun Response.toJsonObject() : JSONObject? {

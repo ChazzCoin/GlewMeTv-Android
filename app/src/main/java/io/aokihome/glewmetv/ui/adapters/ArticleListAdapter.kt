@@ -14,53 +14,52 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.Article
+import io.aokihome.glewmetv.db.openArticle
 import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
 import io.aokihome.glewmetv.ui.readArticleDialog
-import io.realm.RealmList
 
 
-class ArticleListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolean=false, var listOfArticles: MutableList<Article>? = null):
+class ArticleListAdapter(var context: MainGlewMeTvActivity?,
+                         var listOfArticles: MutableList<Article>? = null, var fragmentActivity: FragmentActivity):
         RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_list_hookups2, parent, false)
-        return ArticleViewHolder(convertView = view)
+            .inflate(R.layout.item_list_articles, parent, false)
+        return ArticleViewHolder(convertView = view, fragmentActivity)
     }
 
     override fun getItemCount(): Int {
         return listOfArticles?.size ?: 0
     }
 
-    fun destroyThySelf() {
-        val size = listOfArticles?.size
-        listOfArticles?.clear()
-        notifyItemRangeRemoved(0, size ?: 0);
-    }
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
+
         println("binding hookup")
-        listOfArticles?.let { itHookups ->
-            holder.bind(itHookups[position])
+        listOfArticles?.let { itArticles ->
+            holder.bind(itArticles[position])
             //onClickListener
             holder.itemView.setOnClickListener {
                 context?.let {
                     println("HOOKUP CLICKED: starting dialog now!")
-                    readArticleDialog(it, itHookups[position]).show()
+                    itArticles[position].openArticle()
+//                    readArticleDialog(it, itArticles[position]).show()
                 }
 
             }
         }
     }
 
-    class ArticleViewHolder(convertView: View, val isTopTen: Boolean=false) : RecyclerView.ViewHolder(convertView) {
+    class ArticleViewHolder(convertView: View, private val frag: FragmentActivity) : RecyclerView.ViewHolder(convertView) {
         //-> LEFT (TO)
         val textTitle = itemView.findViewById<TextView>(R.id.txtTitle)
         val textDate = itemView.findViewById<TextView>(R.id.txtPublishedDate)
@@ -80,7 +79,7 @@ class ArticleListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boole
             textDate.text = article.published_date
             if (article.imgUrl.isNotEmpty()) {
                 try {
-                    Picasso.get().load(article.imgUrl).fit().into(imgUrl)
+                    Glide.with(frag).load(article.imgUrl).into(imgUrl)
                 } catch (e: Exception) {
                     imgUrl.visibility = View.GONE
                     println("Failed to load image: $e")

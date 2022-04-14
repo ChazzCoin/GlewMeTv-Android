@@ -7,6 +7,7 @@ import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.Article
@@ -34,7 +35,7 @@ fun readArticleDialog(activity: Activity, article: Article?) : Dialog {
         dialog.txtPublishedDate.text = it.published_date
 
         try {
-            Picasso.get().load(it.imgUrl).fit().into(dialog.imgUrl)
+            Glide.with(activity).load(it.imgUrl).into(dialog.imgUrl)
         } catch (e: Exception) {
             println("Failed to load image: $e")
         }

@@ -20,6 +20,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.373" />
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#A42E2E2E"
+        app:layout_constraintBottom_toBottomOf="@+id/txtArticleCount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/searchBox"
         android:layout_width="0dp"
@@ -94,10 +104,8 @@
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="48dp"
-        android:layout_marginBottom="9dp"
         android:background="@drawable/border_shadow_accent"
         android:src="@android:drawable/ic_menu_revert"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSearchIcon" />
 
@@ -108,10 +116,8 @@
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="9dp"
         android:background="@drawable/border_shadow_accent"
         android:src="@android:drawable/stat_sys_download"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toStartOf="@+id/btnImgRevert"
         app:layout_constraintTop_toBottomOf="@+id/searchBox" />
 
@@ -139,14 +145,17 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="1dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="1dp"
+        android:layout_marginBottom="50dp"
         android:background="#00FFFFFF"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtArticleCount" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

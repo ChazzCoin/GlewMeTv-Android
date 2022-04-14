@@ -18,12 +18,9 @@
         android:theme="@style/Theme.GlewMeTv">
 
         <activity
-            android:name="io.aokihome.glewmetv.ui.HookupDetailsActivity"
-            android:label="@string/title_activity_hookup">
-        </activity>
-        <activity
             android:name="io.aokihome.glewmetv.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

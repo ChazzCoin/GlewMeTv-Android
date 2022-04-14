@@ -13,7 +13,7 @@
         android:id="@+id/navigation_hookup_list"
         android:name="io.aokihome.glewmetv.ui.main.JarticleSearchFragment"
         android:label="Jarticle Search"
-        tools:layout="@layout/fragment_metareport" />
+        tools:layout="@layout/fragment_jarticle" />
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="io.aokihome.glewmetv.ui.main.DashboardFragment"

@@ -5,10 +5,12 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.aokihome.glewmetv.db.Event
@@ -20,6 +22,7 @@ import io.aokihome.glewmetv.ui.adapters.ArticleListAdapter
 import io.aokihome.glewmetv.ui.adapters.TickerAdapter
 import io.realm.Realm
 import io.realm.RealmList
+import kotlinx.android.synthetic.main.fragment_jarticle.*
 import kotlinx.coroutines.*
 import java.lang.Exception
 
@@ -50,12 +53,16 @@ suspend inline fun await(crossinline block: suspend CoroutineScope.() -> Unit) {
     }.await()
 }
 
-fun RecyclerView.initArticles(listOfArticles: MutableList<Article>, isTopTen: Boolean = false) : ArticleListAdapter {
-    val hookupAdapter = ArticleListAdapter(context = MainGlewMeTvActivity.context, isTopTen = isTopTen, listOfArticles = listOfArticles)
-    this.layoutManager = LinearLayoutManager(
-            MainGlewMeTvActivity.context,
-            if (isTopTen) LinearLayoutManager.HORIZONTAL else LinearLayoutManager.VERTICAL,
-            false)
+fun RecyclerView.setMargins(left:Int, top:Int, right:Int, bottom:Int) {
+    val marginLayoutParams = ViewGroup.MarginLayoutParams(this.layoutParams)
+    marginLayoutParams.setMargins(left, top, right, bottom)
+    this.layoutParams = marginLayoutParams
+}
+
+fun RecyclerView.initArticles(listOfArticles: MutableList<Article>, fragmentActivity: FragmentActivity) : ArticleListAdapter {
+    val hookupAdapter = ArticleListAdapter(context = MainGlewMeTvActivity.context,
+                                            listOfArticles = listOfArticles, fragmentActivity = fragmentActivity)
+    this.layoutManager = LinearLayoutManager(MainGlewMeTvActivity.context, LinearLayoutManager.VERTICAL, false)
     this.adapter = hookupAdapter
     return hookupAdapter
 }
