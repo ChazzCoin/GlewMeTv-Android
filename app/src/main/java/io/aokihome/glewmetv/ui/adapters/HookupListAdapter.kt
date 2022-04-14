@@ -73,23 +73,31 @@ class HookupListAdapter(var context: MainGlewMeTvActivity?, var isTopTen: Boolea
     class HookupViewHolder(convertView: View, val isTopTen: Boolean=false) : RecyclerView.ViewHolder(convertView) {
         //-> LEFT (TO)
         val textTitle = itemView.findViewById<TextView>(R.id.txtTitle)
-        val textRank = itemView.findViewById<TextView>(R.id.txtAuthor)
         val textDate = itemView.findViewById<TextView>(R.id.txtPublishedDate)
         val textSource = itemView.findViewById<TextView>(R.id.txtSource)
         val imgUrl = itemView.findViewById<ImageView>(R.id.imgUrl)
-        val itemLinearLayout = itemView.findViewById<LinearLayout>(R.id.itemLinearLayout)
 
         fun bind(hookup: Hookup) {
-            textTitle.text = hookup.title
-            textRank.text = "Rank: ${hookup.rank}"
-            textSource.text = hookup.source.toString()
+
+            val sour = hookup.source.toString()
+            if (sour.contains("twitter")) {
+                textTitle.text = hookup.body
+            } else {
+                textTitle.text = hookup.title
+            }
+
+            textSource.text = sour
             textDate.text = hookup.published_date
             if (hookup.imgUrl.isNotEmpty()) {
                 try {
                     Picasso.get().load(hookup.imgUrl).fit().into(imgUrl)
                 } catch (e: Exception) {
+                    imgUrl.visibility = View.GONE
                     println("Failed to load image: $e")
                 }
+            } else {
+                imgUrl.visibility = View.GONE
+                println("Empty Img Url.")
             }
 
         }

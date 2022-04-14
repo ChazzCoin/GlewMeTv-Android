@@ -11,7 +11,8 @@ class GmtHttpRequest {
     constructor()
 
     companion object {
-        val URL_BASE = "http://192.168.1.240:3671"
+        val URL_BASE_one = "http://192.168.1.240:3671"
+        val URL_BASE = "http://192.168.1.42:3671"
         val URL_ARTICLES_DATA = "$URL_BASE/articles"
         val URL_SEARCH_ARTICLES_DATA = "$URL_BASE/articles/search/"
         val URL_GLEWMETV_DATA = "$URL_BASE/glewmetv/data"

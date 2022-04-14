@@ -50,15 +50,15 @@ class DashboardFragment : Fragment() {
             }
 
         }
-        io {
-            loadGlewMeTvData()
-            println(listOfTickers)
-            main {
-//                initTickers()
-//                initEvents()
-//                initTopTen()
-            }
-        }
+//        io {
+//            loadGlewMeTvData()
+//            println(listOfTickers)
+//            main {
+////                initTickers()
+////                initEvents()
+////                initTopTen()
+//            }
+//        }
 
     }
 

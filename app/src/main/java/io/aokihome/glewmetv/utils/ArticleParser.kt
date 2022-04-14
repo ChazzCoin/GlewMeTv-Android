@@ -15,7 +15,7 @@ fun ArticleParser(response: Response): MutableList<Hookup> {
     for (item in hookupList) {
         val tempHookup = item.toHookup()
         articleList.add(tempHookup)
-        addHookupToSessionOnMain(tempHookup)
+//        addHookupToSessionOnMain(tempHookup)
     }
     return articleList
 }
