@@ -10,6 +10,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/glewmebg"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,8 +27,7 @@
                 android:id="@+id/recyclerLiveEvents"
                 android:layout_width="match_parent"
                 android:layout_height="225dp"
-                tools:listitem="@layout/item_event_tv_banner"
-                android:background="@drawable/vintage_glewmetv_banner_transparent" />
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/headerTickers"

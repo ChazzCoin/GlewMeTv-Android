@@ -71,6 +71,26 @@ class JarticleSearchFragment() : Fragment() {
             setupArticleAdapter(temp)
         }
 
+        btnImgClearCache.setOnClickListener {
+            hideKeyboard()
+            clearArticleCache()
+            showSuccess("Successfully Cleared Saved Cache.", context = context)
+            setupArticleAdapter()
+        }
+
+        btnImgClearCache.setOnLongClickListener {
+            hideKeyboard()
+            clearArticleFavorites()
+            showSuccess("Successfully Cleared Favorites.", context = context)
+            return@setOnLongClickListener true
+        }
+
+        btnImgSaveCache.setOnClickListener {
+            hideKeyboard()
+            articleAdapter?.listOfArticles?.saveCached()
+            showSuccess("Successfully Saved Current List to Cache.", context = context)
+        }
+
         searchBox.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 //Perform Code
@@ -95,6 +115,7 @@ class JarticleSearchFragment() : Fragment() {
         if (!searchTerm.isNullOrEmpty()) {
             toggleLoading(on = true)
             clearRecyclerView()
+            showSuccess("Searching Hark Database for: [ $searchTerm ]", context = context)
             io {
                 val response = GmtHttpRequest().searchAsync(searchTerm).await()
                 val arts = ArticleParser(response)
@@ -171,7 +192,12 @@ class JarticleSearchFragment() : Fragment() {
                 return
             }
         }
+        articleAdapter = null
+        articleAdapter = recyclerView.initArticles(mutableListOf(), fragmentActivity = this.requireActivity())
+        txtArticleCount.text = "0 in list"
+        toggleLoading(on = false)
     }
+
 
 }
 

@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:background="#00FFFFFF"
         android:paddingTop="100dp"
-        android:paddingBottom="20dp"
+        android:paddingBottom="10dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -159,6 +159,32 @@
         android:src="?android:attr/actionModeFindDrawable"
         app:layout_constraintEnd_toStartOf="@+id/btnImgLoadFavorites"
         app:layout_constraintTop_toBottomOf="@+id/searchBox" />
+
+    <ImageButton
+        android:id="@+id/btnImgClearCache"
+        style="@android:style/Widget.Holo.ImageButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/border_shadow_accent"
+        android:src="@android:drawable/ic_menu_delete"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintEnd_toStartOf="@+id/txtOverallArticleCount"
+        app:layout_constraintHorizontal_bias="0.388"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnImgSaveCache"
+        style="@android:style/Widget.Holo.ImageButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/border_shadow_accent"
+        android:src="@android:drawable/stat_notify_sdcard"
+        app:layout_constraintBottom_toTopOf="@+id/btnImgClearCache"
+        app:layout_constraintEnd_toStartOf="@+id/txtOverallArticleCount"
+        app:layout_constraintHorizontal_bias="0.388"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/txtOverallArticleCount"

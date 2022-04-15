@@ -94,12 +94,33 @@ fun List<Article>.saveCached() {
     }
 }
 
+
 /** -> TRIED AND TRUE! <- */
 fun Article.saveFavorite() {
     val sess = Session.session
     executeRealmOnMain {
         sess?.let { itSess ->
             itSess.savedArticles?.add(this)
+            it.copyToRealmOrUpdate(itSess)
+        }
+    }
+}
+
+fun clearArticleCache() {
+    val sess = Session.session
+    executeRealmOnMain {
+        sess?.let { itSess ->
+            itSess.cacheArticles = null
+            it.copyToRealmOrUpdate(itSess)
+        }
+    }
+}
+
+fun clearArticleFavorites() {
+    val sess = Session.session
+    executeRealmOnMain {
+        sess?.let { itSess ->
+            itSess.savedArticles = null
             it.copyToRealmOrUpdate(itSess)
         }
     }
