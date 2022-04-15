@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -22,9 +23,12 @@ import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.Article
+import io.aokihome.glewmetv.db.addArticleToSessionOnMain
 import io.aokihome.glewmetv.db.openArticle
+import io.aokihome.glewmetv.db.saveFavorite
 import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
 import io.aokihome.glewmetv.ui.readArticleDialog
+import io.aokihome.glewmetv.utils.showSuccess
 
 
 class ArticleListAdapter(var context: MainGlewMeTvActivity?,
@@ -46,27 +50,29 @@ class ArticleListAdapter(var context: MainGlewMeTvActivity?,
 
         println("binding hookup")
         listOfArticles?.let { itArticles ->
-            holder.bind(itArticles[position])
-            //onClickListener
-            holder.itemView.setOnClickListener {
-                context?.let {
-                    println("HOOKUP CLICKED: starting dialog now!")
-                    itArticles[position].openArticle()
-//                    readArticleDialog(it, itArticles[position]).show()
-                }
+            holder.bind(itArticles[position], context)
 
-            }
+//            //onClickListener
+//            holder.itemView.setOnClickListener {
+//                context?.let {
+//                    println("HOOKUP CLICKED: starting dialog now!")
+//                    itArticles[position].openArticle()
+////                    readArticleDialog(it, itArticles[position]).show()
+//                }
+//
+//            }
         }
     }
 
-    class ArticleViewHolder(convertView: View, private val frag: FragmentActivity) : RecyclerView.ViewHolder(convertView) {
+    open class ArticleViewHolder(convertView: View, private val frag: FragmentActivity) : RecyclerView.ViewHolder(convertView) {
         //-> LEFT (TO)
         val textTitle = itemView.findViewById<TextView>(R.id.txtTitle)
         val textDate = itemView.findViewById<TextView>(R.id.txtPublishedDate)
         val textSource = itemView.findViewById<TextView>(R.id.txtSource)
         val imgUrl = itemView.findViewById<ImageView>(R.id.imgUrl)
+        val btnSaveIcon = itemView.findViewById<ImageButton>(R.id.btnSaveIcon)
 
-        fun bind(article: Article) {
+        fun bind(article: Article, context: Context?) {
 
             val sour = article.source.toString()
             if (sour.contains("twitter", ignoreCase = true)) {
@@ -88,6 +94,21 @@ class ArticleListAdapter(var context: MainGlewMeTvActivity?,
                 imgUrl.visibility = View.GONE
                 println("Empty Img Url.")
             }
+
+            textTitle.setOnClickListener {
+                println("Article CLICKED: starting dialog now!")
+                article.openArticle()
+            }
+            imgUrl.setOnClickListener {
+                println("Article CLICKED: starting dialog now!")
+                article.openArticle()
+            }
+            btnSaveIcon.setOnClickListener {
+                article.saveFavorite()
+                showSuccess("Article Saved To Favorites!", context = context)
+                println("Article Saved!")
+            }
+
 
         }
     }

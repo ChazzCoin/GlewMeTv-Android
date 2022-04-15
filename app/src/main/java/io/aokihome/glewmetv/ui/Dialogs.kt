@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.os.Build
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
@@ -34,11 +35,18 @@ fun readArticleDialog(activity: Activity, article: Article?) : Dialog {
         dialog.txtSource.text = it.source
         dialog.txtPublishedDate.text = it.published_date
 
-        try {
-            Glide.with(activity).load(it.imgUrl).into(dialog.imgUrl)
-        } catch (e: Exception) {
-            println("Failed to load image: $e")
+        if (it.imgUrl.isNotEmpty()) {
+            try {
+                Glide.with(activity).load(it.imgUrl).into(dialog.imgUrl)
+            } catch (e: Exception) {
+                dialog.imgUrl.visibility = View.GONE
+                println("Failed to load image: $e")
+            }
+        } else {
+            dialog.imgUrl.visibility = View.GONE
+            println("Empty Img Url.")
         }
+
     }
 
     return dialog

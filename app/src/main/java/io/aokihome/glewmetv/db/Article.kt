@@ -1,7 +1,6 @@
 package io.aokihome.glewmetv.db
 
 import android.app.Activity
-import android.content.Context
 import com.github.kittinunf.fuel.core.Response
 import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
 import io.aokihome.glewmetv.ui.readArticleDialog
@@ -9,7 +8,6 @@ import io.aokihome.glewmetv.utils.getSafeDouble
 import io.aokihome.glewmetv.utils.getSafeString
 import io.realm.RealmObject
 import org.json.JSONObject
-import java.security.AccessControlContext
 
 open class Article : RealmObject() {
 
@@ -60,24 +58,24 @@ fun Response.toJsonObject() : JSONObject? {
 }
 
 fun JSONObject.toArticle() : Article {
-    val hookup = Article()
-    hookup.id = getSafeString("id")
-    hookup.author = getSafeString("author")
-    hookup.author = getSafeString("author")
-    hookup.title = getSafeString("title")
-    hookup.description = getSafeString("description")
-    hookup.body = getSafeString("body").trim()
-    hookup.published_date = getSafeString("published_date")
-    hookup.url = getSafeString("url")
-    hookup.imgUrl = getSafeString("img_url", default = getSafeString("imgUrl"))
-    hookup.source = getSafeString("source")
-    hookup.source_rank = getSafeString("source_rank")
-    hookup.category = getSafeString("category")
-    hookup.sentiment = getSafeString("sentiment")
-    hookup.score = getSafeDouble("score")
-    hookup.title_score = getSafeDouble("title_score")
-    hookup.description_score = getSafeDouble("description_score")
-    hookup.body_score = getSafeDouble("body_score")
-    hookup.rank = getSafeDouble("rank")
-    return hookup
+    val article = Article()
+    article.id = getSafeString("id")
+    article.author = getSafeString("author")
+    article.author = getSafeString("author")
+    article.title = getSafeString("title")
+    article.description = getSafeString("description")
+    article.body = getSafeString("body").trim()
+    article.published_date = getSafeString("published_date")
+    article.url = getSafeString("url")
+    article.imgUrl = getSafeString("img_url", default = getSafeString("imgUrl"))
+    article.source = getSafeString("source")
+    article.source_rank = getSafeString("source_rank")
+    article.category = getSafeString("category")
+    article.sentiment = getSafeString("sentiment")
+    article.score = getSafeDouble("score")
+    article.title_score = getSafeDouble("title_score")
+    article.description_score = getSafeDouble("description_score")
+    article.body_score = getSafeDouble("body_score")
+    article.rank = getSafeDouble("rank")
+    return article
 }

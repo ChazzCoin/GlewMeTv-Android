@@ -34,13 +34,14 @@ inline fun tryCatch(block:() -> Unit) {
     }
 }
 
-
+/** -> TRIED AND TRUE! <- */
 inline fun main(crossinline block: suspend CoroutineScope.() -> Unit) {
     CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
         block(this)
     }
 }
 
+/** -> TRIED AND TRUE! <- */
 inline fun io(crossinline block: suspend CoroutineScope.() -> Unit) {
     CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
         block(this)
@@ -59,6 +60,7 @@ fun RecyclerView.setMargins(left:Int, top:Int, right:Int, bottom:Int) {
     this.layoutParams = marginLayoutParams
 }
 
+/** -> TRIED AND TRUE! <- */
 fun RecyclerView.initArticles(listOfArticles: MutableList<Article>, fragmentActivity: FragmentActivity) : ArticleListAdapter {
     val hookupAdapter = ArticleListAdapter(context = MainGlewMeTvActivity.context,
                                             listOfArticles = listOfArticles, fragmentActivity = fragmentActivity)
@@ -90,11 +92,13 @@ fun Activity.hideKeyboard() {
     hideKeyboard(currentFocus ?: View(this))
 }
 
+/** -> TRIED AND TRUE! <- */
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
+/** -> TRIED AND TRUE! <- */
 fun <T> RealmList<T>?.toMutableList() : MutableList<T> {
     val listOfT = mutableListOf<T>()
     this?.let {
@@ -105,6 +109,7 @@ fun <T> RealmList<T>?.toMutableList() : MutableList<T> {
     return listOfT
 }
 
+/** -> TRIED AND TRUE! <- */
 fun Any?.isNullOrEmpty() : Boolean {
     if (this == null) return true
     when (this) {
@@ -121,10 +126,12 @@ fun Any?.isNullOrEmpty() : Boolean {
     return false
 }
 
+/** -> TRIED AND TRUE! <- */
 fun realm() : Realm {
     return Realm.getDefaultInstance()
 }
 
+/** -> TRIED AND TRUE! <- */
 inline fun executeRealmOnMain(crossinline block: (Realm) -> Unit) {
     main {
         realm().executeTransaction {
@@ -143,6 +150,7 @@ fun showFailedToast(context: Context, mess: String = "There was an Error.") {
     Toast.makeText(context, mess, Toast.LENGTH_SHORT).show()
 }
 
+/** -> TRIED AND TRUE! <- */
 fun showSuccess(mess: String = "Success!", context: Context? = null) {
     context?.let {
         MainGlewMeTvActivity.context?.let {

@@ -8,10 +8,12 @@
         <entry key="app/src/main/res/drawable/border_shadow_accent.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/border_shadow_primary_dark.xml" value="0.1035" />
         <entry key="app/src/main/res/drawable/border_shadow_white.xml" value="0.2475" />
+        <entry key="app/src/main/res/layout/activity_url_intent_receiver.xml" value="0.375" />
         <entry key="app/src/main/res/layout/content_hookup.xml" value="0.223731884057971" />
         <entry key="app/src/main/res/layout/dialog_hookup_details.xml" value="0.3182291666666667" />
         <entry key="app/src/main/res/layout/fragment_jarticle.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_metareport.xml" value="0.46408839779005523" />
+        <entry key="app/src/main/res/layout/item_list_articles.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_list_hookups2.xml" value="0.5" />
         <entry key="app/src/main/res/layout/read_article.xml" value="0.3182291666666667" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.37604166666666666" />

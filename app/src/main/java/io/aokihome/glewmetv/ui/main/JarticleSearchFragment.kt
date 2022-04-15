@@ -21,7 +21,7 @@ import kotlinx.coroutines.SupervisorJob
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class JarticleSearchFragment() : Fragment() {
-    var session: Session? = null
+    var mainSession: Session? = null
 
     var articleAdapter: ArticleListAdapter? = null
     private var lockedListOfArticles: List<Article>? = null
@@ -35,6 +35,8 @@ class JarticleSearchFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainSession = Session.session
 
         // WORKING! SEARCH!
         btnSearchIcon.setOnClickListener {
@@ -55,6 +57,18 @@ class JarticleSearchFragment() : Fragment() {
             hideKeyboard()
             searchBox.setText("")
             setupArticleAdapter()
+        }
+
+        btnImgLoadFavorites.setOnClickListener {
+            hideKeyboard()
+            val temp = mainSession?.savedArticles
+            setupArticleAdapter(temp)
+        }
+
+        btnImgLoadCached.setOnClickListener {
+            hideKeyboard()
+            val temp = mainSession?.cacheArticles
+            setupArticleAdapter(temp)
         }
 
         searchBox.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
@@ -96,9 +110,16 @@ class JarticleSearchFragment() : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setupArticleAdapter()
+    }
+
     private fun setLockedArticlesFromDB(response: com.github.kittinunf.fuel.core.Response) {
         val arts = ArticleParser(response)
+        lockedListOfArticles = null
         lockedListOfArticles = arts.toList()
+        lockedListOfArticles?.saveCached()
         txtOverallArticleCount.text = "${lockedListOfArticles?.size} Total Articles"
     }
 
@@ -138,20 +159,18 @@ class JarticleSearchFragment() : Fragment() {
 
     private fun setupArticleAdapter(articles: MutableList<Article>? = lockedListOfArticles?.toMutableList()) {
 
-        articles?.let {
-            if (it.isNotEmpty() && it.size > 0) {
+        articles?.let { itArticles ->
+            if (itArticles.isNotEmpty() && itArticles.size > 0) {
                 articleAdapter = null
-                // only 100
-//                val lastIndex = it.indices.last
-//                val onlyOneHundredList = it.subList(0, if (lastIndex > 500) 500 else lastIndex )
-                it.shuffle()
-                articleAdapter = recyclerView.initArticles(it, fragmentActivity = this.requireActivity())
-                txtArticleCount.text = "${it.size} in list"
+                realm().executeTransaction {
+                    itArticles.shuffle()
+                }
+                articleAdapter = recyclerView.initArticles(itArticles, fragmentActivity = this.requireActivity())
+                txtArticleCount.text = "${itArticles.size} in list"
                 toggleLoading(on = false)
                 return
             }
         }
-//        toast("No Articles!", MainGlewMeTvActivity.context)
     }
 
 }

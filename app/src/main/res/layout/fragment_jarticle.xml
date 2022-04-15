@@ -7,6 +7,21 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.JarticleSearchFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00FFFFFF"
+        android:paddingTop="100dp"
+        android:paddingBottom="20dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <ProgressBar
         android:id="@+id/loadingProgressBar"
         style="?android:attr/progressBarStyle"
@@ -24,7 +39,7 @@
         android:id="@+id/imageView4"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#A42E2E2E"
+        android:background="#131313"
         app:layout_constraintBottom_toBottomOf="@+id/txtArticleCount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +50,7 @@
         android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="50dp"
         android:background="@drawable/border_shadow_white"
         android:ems="10"
@@ -121,6 +136,30 @@
         app:layout_constraintEnd_toStartOf="@+id/btnImgRevert"
         app:layout_constraintTop_toBottomOf="@+id/searchBox" />
 
+    <ImageButton
+        android:id="@+id/btnImgLoadFavorites"
+        style="@android:style/Widget.Holo.ImageButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/border_shadow_accent"
+        android:src="@android:drawable/btn_star_big_on"
+        app:layout_constraintEnd_toStartOf="@+id/btnImgDownload"
+        app:layout_constraintTop_toBottomOf="@+id/searchBox" />
+
+    <ImageButton
+        android:id="@+id/btnImgLoadCached"
+        style="@android:style/Widget.Holo.ImageButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/border_shadow_accent"
+        android:src="?android:attr/actionModeFindDrawable"
+        app:layout_constraintEnd_toStartOf="@+id/btnImgLoadFavorites"
+        app:layout_constraintTop_toBottomOf="@+id/searchBox" />
+
     <TextView
         android:id="@+id/txtOverallArticleCount"
         android:layout_width="wrap_content"
@@ -141,21 +180,5 @@
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtOverallArticleCount" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="50dp"
-        android:background="#00FFFFFF"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

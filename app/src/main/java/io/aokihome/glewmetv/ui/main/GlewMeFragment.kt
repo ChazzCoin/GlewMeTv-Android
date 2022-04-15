@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import io.aokihome.glewmetv.R
-import io.aokihome.glewmetv.db.removeAllHookupsOnMain
 import io.aokihome.glewmetv.db.removeAllTickersOnMain
 
 /**
