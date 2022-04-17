@@ -1,14 +1,11 @@
 package io.aokihome.glewmetv.db
 
-import io.aokihome.glewmetv.utils.executeRealm
 import io.aokihome.glewmetv.utils.executeRealmOnMain
 import io.aokihome.glewmetv.utils.main
-import io.aokihome.glewmetv.utils.realm
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import org.json.JSONObject
 
 /**
  * Created by ChazzCoin : December 2019.
@@ -33,7 +30,7 @@ open class Session : RealmObject() {
 
     }
 
-    /** -> EVERYTHING IS STATIC BELOW THIS POINT <- **/
+    /** -> STATIC <- **/
     companion object {
         //Global App Setup
         private const val aisession = 1
@@ -59,8 +56,12 @@ open class Session : RealmObject() {
     //END OF STATIC
     }
 }
+/**
+ * SESSION EXTENSIONS
+ * */
 
-fun RealmList<Article>?.convertRealmListToList() : MutableList<Article> {
+
+fun RealmList<Article>?.toList() : MutableList<Article> {
     val tempList = mutableListOf<Article>()
     this?.let {
         for (item in it) {
@@ -70,7 +71,8 @@ fun RealmList<Article>?.convertRealmListToList() : MutableList<Article> {
     return tempList
 }
 
-fun List<Article>?.convertListToRealmList() : RealmList<Article> {
+/** -> TRIED AND TRUE! <- */
+fun List<Article>?.toRealmList() : RealmList<Article> {
     val realmList = RealmList<Article>()
     this?.let {
         for (item in it) {
@@ -89,6 +91,8 @@ fun List<Article>.saveCached() {
     executeRealmOnMain {
         sess?.let { itSess ->
             itSess.cacheArticles?.addAll(this)
+            val newList = itSess.cacheArticles?.distinct()
+            itSess.cacheArticles = newList.toRealmList()
             it.copyToRealmOrUpdate(itSess)
         }
     }
@@ -96,12 +100,16 @@ fun List<Article>.saveCached() {
 
 
 /** -> TRIED AND TRUE! <- */
-fun Article.saveFavorite() {
+fun Article.saveToFavorites() {
     val sess = Session.session
     executeRealmOnMain {
         sess?.let { itSess ->
-            itSess.savedArticles?.add(this)
-            it.copyToRealmOrUpdate(itSess)
+            itSess.savedArticles?.let { itSavedArticles ->
+                if (!itSavedArticles.contains(this)) {
+                    itSess.savedArticles?.add(this)
+                    it.copyToRealmOrUpdate(itSess)
+                }
+            }
         }
     }
 }
@@ -110,22 +118,26 @@ fun clearArticleCache() {
     val sess = Session.session
     executeRealmOnMain {
         sess?.let { itSess ->
-            itSess.cacheArticles = null
+            itSess.cacheArticles = RealmList()
             it.copyToRealmOrUpdate(itSess)
         }
     }
 }
 
+//
 fun clearArticleFavorites() {
     val sess = Session.session
     executeRealmOnMain {
         sess?.let { itSess ->
-            itSess.savedArticles = null
+            itSess.savedArticles = RealmList()
             it.copyToRealmOrUpdate(itSess)
         }
     }
 }
 
+/**
+ * Main Safe Session Block
+ */
 inline fun session(crossinline block: (Session) -> Unit): Unit? {
     return Session.session?.let {
         main {
@@ -133,7 +145,6 @@ inline fun session(crossinline block: (Session) -> Unit): Unit? {
         }
     }
 }
-
 
 fun addArticleToSessionOnMain(article: Article) {
     val session = Session.session

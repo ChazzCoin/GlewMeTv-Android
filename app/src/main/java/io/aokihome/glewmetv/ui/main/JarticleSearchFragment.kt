@@ -5,7 +5,6 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
 import androidx.fragment.app.Fragment
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.*
@@ -24,7 +23,7 @@ class JarticleSearchFragment() : Fragment() {
     var mainSession: Session? = null
 
     var articleAdapter: ArticleListAdapter? = null
-    private var lockedListOfArticles: List<Article>? = null
+    private var currentListOfArticles: List<Article>? = null
     var filteredList = mutableListOf<Article>()
     val io = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -37,6 +36,13 @@ class JarticleSearchFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mainSession = Session.session
+        if (!currentListOfArticles.isNullOrEmpty()){
+            setupArticleAdapter()
+        } else if (!mainSession?.cacheArticles.isNullOrEmpty()) {
+            val temp = mainSession?.cacheArticles
+            setupArticleAdapter(articles = temp)
+//            toast("Cached Articles Loaded!")
+        }
 
         // WORKING! SEARCH!
         btnSearchIcon.setOnClickListener {
@@ -48,10 +54,11 @@ class JarticleSearchFragment() : Fragment() {
             runLoadLatestArticlesAsync()
         }
 
-        searchBox.afterTextChanged {
-            if (it.length < 2) return@afterTextChanged
-            internalSearchArticles(it)
-        }
+        // Real-Time Search
+//        searchBox.afterTextChanged {
+//            if (it.isEmpty()) return@afterTextChanged
+//            internalSearchArticles(it)
+//        }
 
         btnImgRevert.setOnClickListener {
             hideKeyboard()
@@ -95,6 +102,8 @@ class JarticleSearchFragment() : Fragment() {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 //Perform Code
                 hideKeyboard()
+                internalSearchArticles(searchBox.text.toString())
+                searchBox.setText("")
                 return@OnKeyListener true
             }
             false
@@ -102,11 +111,10 @@ class JarticleSearchFragment() : Fragment() {
 
     }
 
-    private fun internalSearchArticles(searchTerm: String) {
-        if (lockedListOfArticles.isNullOrEmpty()) return
-        val temp = lockedListOfArticles?.toMutableList()
-        filteredList = temp.search(searchTerm)
-        setupArticleAdapter(filteredList.toMutableList())
+    private fun internalSearchArticles(searchTerm: String, articleList: MutableList<Article>? = currentListOfArticles?.toMutableList()) {
+        if (articleList.isNullOrEmpty()) return
+        filteredList = articleList.search(searchTerm)
+        setupSearchArticleAdapter(filteredList.toMutableList())
     }
 
     private fun externalSearchArticlesAsync() {
@@ -119,9 +127,9 @@ class JarticleSearchFragment() : Fragment() {
             io {
                 val response = GmtHttpRequest().searchAsync(searchTerm).await()
                 val arts = ArticleParser(response)
-                lockedListOfArticles = arts.toList()
+                currentListOfArticles = arts.toList()
                 main {
-                    txtOverallArticleCount.text = "${lockedListOfArticles?.size} Total Articles"
+                    txtOverallArticleCount.text = "${currentListOfArticles?.size} Total Articles"
                     setupArticleAdapter()
                     println(arts)
                 }
@@ -131,17 +139,13 @@ class JarticleSearchFragment() : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        setupArticleAdapter()
-    }
 
-    private fun setLockedArticlesFromDB(response: com.github.kittinunf.fuel.core.Response) {
+    private fun setCurrentArticlesFromDB(response: com.github.kittinunf.fuel.core.Response) {
         val arts = ArticleParser(response)
-        lockedListOfArticles = null
-        lockedListOfArticles = arts.toList()
-        lockedListOfArticles?.saveCached()
-        txtOverallArticleCount.text = "${lockedListOfArticles?.size} Total Articles"
+        currentListOfArticles = null
+        currentListOfArticles = arts.toList()
+        currentListOfArticles?.saveCached()
+        txtOverallArticleCount.text = "${currentListOfArticles?.size} Total Articles"
     }
 
     private fun runLoadLatestArticlesAsync() {
@@ -164,13 +168,13 @@ class JarticleSearchFragment() : Fragment() {
     private suspend fun loadLatestArticles() {
         val response = GmtHttpRequest().getAsync(GmtHttpRequest.URL_ARTICLES_DATA).await()
         main {
-            setLockedArticlesFromDB(response)
+            setCurrentArticlesFromDB(response)
             setupArticleAdapter()
         }
     }
 
     private fun clearRecyclerView() {
-        lockedListOfArticles = null
+        currentListOfArticles = null
         val emptyList = mutableListOf<Article>()
         recyclerView.initArticles(emptyList, fragmentActivity = this.requireActivity())
         txtOverallArticleCount.text = "0 Total Articles"
@@ -178,7 +182,28 @@ class JarticleSearchFragment() : Fragment() {
         recyclerView.visibility = View.INVISIBLE
     }
 
-    private fun setupArticleAdapter(articles: MutableList<Article>? = lockedListOfArticles?.toMutableList()) {
+    private fun setupArticleAdapter(articles: MutableList<Article>? = currentListOfArticles?.toMutableList()) {
+
+        articles?.let { itArticles ->
+            if (itArticles.isNotEmpty() && itArticles.size > 0) {
+                articleAdapter = null
+                currentListOfArticles = itArticles
+                realm().executeTransaction {
+                    itArticles.shuffle()
+                }
+                articleAdapter = recyclerView.initArticles(itArticles, fragmentActivity = this.requireActivity())
+                txtArticleCount.text = "${itArticles.size} in list"
+                toggleLoading(on = false)
+                return
+            }
+        }
+        articleAdapter = null
+        articleAdapter = recyclerView.initArticles(mutableListOf(), fragmentActivity = this.requireActivity())
+        txtArticleCount.text = "0 in list"
+        toggleLoading(on = false)
+    }
+
+    private fun setupSearchArticleAdapter(articles: MutableList<Article>? = currentListOfArticles?.toMutableList()) {
 
         articles?.let { itArticles ->
             if (itArticles.isNotEmpty() && itArticles.size > 0) {

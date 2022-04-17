@@ -126,6 +126,22 @@ fun Any?.isNullOrEmpty() : Boolean {
     return false
 }
 
+//fun Any?.isNotNullOrEmpty() : Boolean {
+//    if (this == null) return true
+//    when (this) {
+//        is String -> {
+//            if (this.isEmpty() || this.isBlank()) return true
+//        }
+//        is Collection<*> -> {
+//            if (this.isEmpty()) return true
+//        }
+//        is RealmList<*> -> {
+//            if (this.isEmpty()) return true
+//        }
+//    }
+//    return false
+//}
+
 /** -> TRIED AND TRUE! <- */
 fun realm() : Realm {
     return Realm.getDefaultInstance()
@@ -150,7 +166,7 @@ fun showFailedToast(context: Context, mess: String = "There was an Error.") {
     Toast.makeText(context, mess, Toast.LENGTH_SHORT).show()
 }
 
-/** -> TRIED AND TRUE! <- */
+/** -> BAD <- */
 fun showSuccess(mess: String = "Success!", context: Context? = null) {
     context?.let {
         MainGlewMeTvActivity.context?.let {
@@ -160,10 +176,13 @@ fun showSuccess(mess: String = "Success!", context: Context? = null) {
 }
 fun toast(mess: String = "Uh OH!", context: Context? = null) {
     context?.let {
-        MainGlewMeTvActivity.context?.let {
-            Toast.makeText(it, mess, Toast.LENGTH_SHORT).show()
-        }
-    } ?: run { Toast.makeText(context, mess, Toast.LENGTH_SHORT).show() }
+        Toast.makeText(it, mess, Toast.LENGTH_SHORT).show()
+        return
+    }
+    MainGlewMeTvActivity.context?.let {
+        Toast.makeText(it, mess, Toast.LENGTH_SHORT).show()
+        return
+    }
 }
 
 
@@ -173,10 +192,30 @@ fun toast(mess: String = "Uh OH!", context: Context? = null) {
 fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(editable: Editable?) {
+            println("afterTextChanged")
             afterTextChanged.invoke(editable.toString())
         }
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            println("beforeTextChanged")
+        }
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            println("onTextChanged")
+        }
+    })
+}
 
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+fun EditText.onTextChanged(afterTextChanged: (String) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(editable: Editable?) {
+            println("afterTextChanged")
+
+        }
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            println("beforeTextChanged")
+        }
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            println("onTextChanged")
+//            afterTextChanged.invoke(editable.toString())
+        }
     })
 }

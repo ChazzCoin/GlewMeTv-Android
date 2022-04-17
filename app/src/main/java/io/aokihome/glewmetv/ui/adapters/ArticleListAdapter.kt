@@ -18,16 +18,13 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.Article
-import io.aokihome.glewmetv.db.addArticleToSessionOnMain
 import io.aokihome.glewmetv.db.openArticle
-import io.aokihome.glewmetv.db.saveFavorite
+import io.aokihome.glewmetv.db.saveToFavorites
 import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
-import io.aokihome.glewmetv.ui.readArticleDialog
 import io.aokihome.glewmetv.utils.showSuccess
 
 
@@ -104,7 +101,7 @@ class ArticleListAdapter(var context: MainGlewMeTvActivity?,
                 article.openArticle()
             }
             btnSaveIcon.setOnClickListener {
-                article.saveFavorite()
+                article.saveToFavorites()
                 showSuccess("Article Saved To Favorites!", context = context)
                 println("Article Saved!")
             }

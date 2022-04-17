@@ -47,6 +47,25 @@ fun MutableList<Article>?.search(searchTerm:String): MutableList<Article> {
     } as MutableList<Article>
 }
 
+fun MutableList<Article>?.searchTitle(searchTerm:String): MutableList<Article> {
+    return this?.filter {
+        it.title.contains(searchTerm, ignoreCase = true)
+    } as MutableList<Article>
+}
+
+fun MutableList<Article>?.searchBody(searchTerm:String): MutableList<Article> {
+    return this?.filter {
+        it.body.contains(searchTerm, ignoreCase = true)
+    } as MutableList<Article>
+}
+
+fun MutableList<Article>?.searchSource(searchTerm:String): MutableList<Article>? {
+    if (this.isNullOrEmpty()) return null
+    return this.filter {
+        it.source?.contains(searchTerm, ignoreCase = true) ?: return null
+    } as MutableList<Article>
+}
+
 fun Response.toJsonObject() : JSONObject? {
     try {
         val body = String(this.body().toByteArray(), Charsets.UTF_8)

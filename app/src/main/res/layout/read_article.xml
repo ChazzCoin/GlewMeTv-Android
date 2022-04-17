@@ -107,7 +107,8 @@
                     android:id="@+id/txtArticleBody"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="uhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiu" />
+                    android:text="uhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiuhiu"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

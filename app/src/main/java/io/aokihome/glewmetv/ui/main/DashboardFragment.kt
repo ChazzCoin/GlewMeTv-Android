@@ -35,7 +35,6 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sess = Session.session
         session {
             listOfRealmTickers = it.tickers
             listOfRealmTickers?.let {
