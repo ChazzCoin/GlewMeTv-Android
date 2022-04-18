@@ -1,6 +1,7 @@
 package io.aokihome.glewmetv.db
 
 import android.app.Activity
+import android.content.Context
 import com.github.kittinunf.fuel.core.Response
 import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
 import io.aokihome.glewmetv.ui.readArticleDialog
@@ -32,6 +33,10 @@ open class Article : RealmObject() {
 
 fun Article.openArticle(activity: Activity?=MainGlewMeTvActivity.context) {
     readArticleDialog(activity ?: return, this).show()
+}
+
+fun Article.openArticleContext(context: Context?=MainGlewMeTvActivity.context) {
+    readArticleDialog(context ?: return, this).show()
 }
 
 fun MutableList<Article>.filterOutSource(source:String) {

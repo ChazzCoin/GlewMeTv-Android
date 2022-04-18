@@ -4,14 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/glewmebg"
     tools:context=".ui.UrlIntentReceiver">
 
     <TextView
         android:id="@+id/txtUrlToDownload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="28dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/border_shadow_primary_dark"
+        android:maxLines="5"
+        android:minLines="1"
+        android:padding="10dp"
         android:text="https://www.website.com/extension"
+        android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -22,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="128dp"
         android:text="URL to Download:"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

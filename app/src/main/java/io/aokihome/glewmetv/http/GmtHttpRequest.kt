@@ -11,7 +11,8 @@ class GmtHttpRequest {
     constructor()
 
     companion object {
-        val URL_BASE = "http://aokiromeo.duckdns.org:3671"
+//        val URL_BASE = "http://aokiromeo.duckdns.org:3671"
+        val URL_BASE = "http://192.168.1.42:1763"
 //        val URL_BASE = "http://192.168.1.166:3671"
 //        val URL_BASE = "http://192.168.1.240:3671"
 //        val URL_BASE = "http://192.168.1.42:3671"

@@ -63,7 +63,7 @@ class JarticleSearchFragment() : Fragment() {
         btnImgRevert.setOnClickListener {
             hideKeyboard()
             searchBox.setText("")
-            setupArticleAdapter()
+            clearArticleAdapter()
         }
 
         btnImgLoadFavorites.setOnClickListener {
@@ -197,6 +197,13 @@ class JarticleSearchFragment() : Fragment() {
                 return
             }
         }
+        articleAdapter = null
+        articleAdapter = recyclerView.initArticles(mutableListOf(), fragmentActivity = this.requireActivity())
+        txtArticleCount.text = "0 in list"
+        toggleLoading(on = false)
+    }
+
+    private fun clearArticleAdapter() {
         articleAdapter = null
         articleAdapter = recyclerView.initArticles(mutableListOf(), fragmentActivity = this.requireActivity())
         txtArticleCount.text = "0 in list"
