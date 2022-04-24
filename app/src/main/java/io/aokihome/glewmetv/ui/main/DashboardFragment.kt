@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.*
 import io.aokihome.glewmetv.http.GmtHttpRequest
+import io.aokihome.glewmetv.ui.adapters.EventListAdapter
 import io.aokihome.glewmetv.ui.adapters.TickerAdapter
 import io.aokihome.glewmetv.utils.*
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -26,6 +28,7 @@ class DashboardFragment : Fragment() {
 
     var listOfTickers = mutableListOf<Ticker>()
     var adapterTicker = TickerAdapter()
+    var adapterEvents = EventListAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -39,37 +42,26 @@ class DashboardFragment : Fragment() {
             listOfRealmTickers = it.tickers
             listOfRealmTickers?.let {
                 listOfTickers = it.toMutableList()
-//                for (item in it) {
-//                    listOfTickers.add(item)
-//                }
-//                initTickers()
-//                initEvents()
-//                initTopTen()
             }
 
         }
-//        io {
-//            loadGlewMeTvData()
-//            println(listOfTickers)
-//            main {
-////                initTickers()
-////                initEvents()
-////                initTopTen()
-//            }
-//        }
+        io {
+            loadGlewMeTvData()
+            println(listOfTickers)
+            main {
+                initTickers()
+                initEvents()
+            }
+        }
 
     }
 
     private suspend fun loadGlewMeTvData() {
-        val response = GmtHttpRequest().getAsync(GmtHttpRequest.URL_GLEWMETV_DATA).await()
-        val responseTwo = GmtHttpRequest().getAsync(GmtHttpRequest.URL_ARTICLES_DATA).await()
+        val response = GmtHttpRequest().getGlewMeTvData().await()
         val parsedPackages = Parser.AllDataPackages(response)
-        val parsedHookups = Parser.Hookups(responseTwo)
         println(parsedPackages)
-        println(parsedHookups)
         listOfTickers = parsedPackages.PriceList
         listOfEvents = parsedPackages.EventList
-        listOfHookups = parsedHookups.HookupList
     }
 
     fun initTickers() {
@@ -77,14 +69,8 @@ class DashboardFragment : Fragment() {
     }
 
     fun initEvents() {
-        var adapter = recyclerLiveEvents.initEvents(listOfEvents)
+        adapterEvents = recyclerLiveEvents.initEvents(listOfEvents)
     }
 
-//    private fun initTopTen() {
-//        listOfHookups = getHookupsList()
-//        listOfHookups.prepHookupsForDisplay()
-//        listOfHookups = listOfHookups.topTen()
-//        hookupAdapter = recyclerHeadlines.initHookups(listOfHookups, true)
-//    }
 
 }

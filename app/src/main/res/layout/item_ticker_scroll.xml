@@ -6,6 +6,7 @@
     android:layout_height="50dp">
 
     <LinearLayout
+        android:id="@+id/tickerScrollLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:layout_margin="5dp"

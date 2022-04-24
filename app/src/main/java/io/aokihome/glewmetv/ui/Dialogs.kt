@@ -10,12 +10,13 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.Article
+import io.aokihome.glewmetv.utils.toJSON
+import io.realm.RealmObject
 import kotlinx.android.synthetic.main.dialog_hookup_details.*
-import kotlinx.android.synthetic.main.dialog_hookup_details.txtAuthor
 import kotlinx.android.synthetic.main.read_article.*
+import org.json.JSONObject
 
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -88,31 +89,21 @@ fun readArticleDialog(activity: Context, article: Article?) : Dialog {
     return dialog
 }
 
-fun readHookupDialog(activity: Activity, article: Article?) : Dialog {
+fun RealmObject.openJsonVersion(activity: Activity) : Dialog? {
+    val jsonObj = this.toJSON() ?: return null
     val dialog = Dialog(activity)
     dialog.setContentView(R.layout.dialog_hookup_details)
     dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-    dialog.window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+    dialog.window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+    dialog.txtJson.text = jsonObj.toString(4)
+    return dialog
+}
 
-    article?.let {
-        dialog.txtHeader.text = it.title
-        dialog.txtAuthor.text = "Rank: ${it.rank}"
-        dialog.txtUrl.text = it.url
-        dialog.txtBody.setText(it.body.trim())
-        dialog.txtTopic.text = "Source: ${it.source}"
-        dialog.txtAuthor.text = it.author
-        dialog.txtCategory.text = it.category
-        dialog.txtSentiment.text = it.sentiment
-        dialog.txtDateTime.text = it.published_date
-    }
-
-    // On Clicks
-//    val cancel = dialog.findViewById(R.id.btnCancelAskUser) as Button
-//    yes.setOnClickListener {
-//        Session.restartApplication(activity)
-//    }
-//    cancel.setOnClickListener {
-//        dialog.dismiss()
-//    }
+fun JSONObject.openJsonString(activity: Activity) : Dialog {
+    val dialog = Dialog(activity)
+    dialog.setContentView(R.layout.dialog_hookup_details)
+    dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+    dialog.window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+    dialog.txtJson.text = this.toString(4)
     return dialog
 }

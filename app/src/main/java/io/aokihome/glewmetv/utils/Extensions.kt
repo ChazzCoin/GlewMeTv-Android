@@ -20,11 +20,21 @@ import io.aokihome.glewmetv.ui.adapters.EventListAdapter
 import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
 import io.aokihome.glewmetv.ui.adapters.ArticleListAdapter
 import io.aokihome.glewmetv.ui.adapters.TickerAdapter
+import io.aokihome.glewmetv.ui.openJsonString
+import io.aokihome.glewmetv.ui.openJsonVersion
 import io.realm.Realm
 import io.realm.RealmList
+import io.realm.RealmObject
 import kotlinx.android.synthetic.main.fragment_jarticle.*
 import kotlinx.coroutines.*
+import org.json.JSONObject
 import java.lang.Exception
+
+
+fun getMainContext(): Context? {
+    MainGlewMeTvActivity.context?.let { return it }
+    return null
+}
 
 inline fun tryCatch(block:() -> Unit) {
     try {
@@ -70,7 +80,7 @@ fun RecyclerView.initArticles(listOfArticles: MutableList<Article>, fragmentActi
 }
 
 fun RecyclerView.initEvents(listOfEvents: MutableList<Event>) : EventListAdapter {
-    val eventAdapter = EventListAdapter(context = MainGlewMeTvActivity.context, listOfEvents = listOfEvents)
+    val eventAdapter = EventListAdapter(listOfEvents = listOfEvents)
     this.layoutManager = LinearLayoutManager(MainGlewMeTvActivity.context, LinearLayoutManager.HORIZONTAL, false)
     this.adapter = eventAdapter
     return eventAdapter
@@ -84,6 +94,16 @@ fun RecyclerView.initTickers(listOfTickers: MutableList<Ticker>) : TickerAdapter
     return adapter
 }
 
+fun View.onClickOpener(obj:JSONObject) {
+    this.setOnClickListener {
+        obj.openJsonString((getMainContext()?: this.context) as Activity).show()
+    }
+}
+fun View.onClickOpener(obj:RealmObject) {
+    this.setOnClickListener {
+        obj.openJsonVersion((getMainContext()?: this.context) as Activity)?.show()
+    }
+}
 fun Fragment.hideKeyboard() {
     view?.let { activity?.hideKeyboard(it) }
 }
@@ -125,22 +145,6 @@ fun Any?.isNullOrEmpty() : Boolean {
     }
     return false
 }
-
-//fun Any?.isNotNullOrEmpty() : Boolean {
-//    if (this == null) return true
-//    when (this) {
-//        is String -> {
-//            if (this.isEmpty() || this.isBlank()) return true
-//        }
-//        is Collection<*> -> {
-//            if (this.isEmpty()) return true
-//        }
-//        is RealmList<*> -> {
-//            if (this.isEmpty()) return true
-//        }
-//    }
-//    return false
-//}
 
 /** -> TRIED AND TRUE! <- */
 fun realm() : Realm {

@@ -24,13 +24,16 @@ class GmtHttpRequest {
 
     private val job = SupervisorJob()
     private val riptIODispatcher = CoroutineScope(Dispatchers.IO + job)
-    private val riptMainDispatcher = CoroutineScope(Dispatchers.Main + job)
 
     /**
      * PUBLIC CONVENIENCE METHODS
      */
     fun getAsync(url: String) = riptIODispatcher.async {
         get(url)
+    }
+
+    fun getGlewMeTvData() = riptIODispatcher.async {
+        get(URL_GLEWMETV_DATA)
     }
 
     fun searchAsync(searchTerm: String) = riptIODispatcher.async {

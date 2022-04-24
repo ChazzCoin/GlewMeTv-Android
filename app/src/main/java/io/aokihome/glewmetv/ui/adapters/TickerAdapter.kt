@@ -1,14 +1,18 @@
 
 package io.aokihome.glewmetv.ui.adapters
 
+import android.app.Activity
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.Ticker
+import io.aokihome.glewmetv.ui.openJsonVersion
+import io.aokihome.glewmetv.utils.getMainContext
 import org.jetbrains.anko.textColor
 
 
@@ -24,7 +28,6 @@ class TickerAdapter(): RecyclerView.Adapter<TickerAdapter.TickerViewHolder>() {
 
     fun addListOfTickers(tickers: List<Ticker>) {
         listOfTickers = tickers
-        this.notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
@@ -35,10 +38,6 @@ class TickerAdapter(): RecyclerView.Adapter<TickerAdapter.TickerViewHolder>() {
         println("binding hookup")
         listOfTickers?.let { itTickers ->
             holder.bind(itTickers[position])
-            //onClickListener
-            holder.itemView.setOnClickListener {
-                //go to ticker activity
-            }
         }
     }
 
@@ -46,6 +45,7 @@ class TickerAdapter(): RecyclerView.Adapter<TickerAdapter.TickerViewHolder>() {
         //-> LEFT (TO)
         val textTicker = itemView.findViewById<TextView>(R.id.txtTickerName)
         val textPrice = itemView.findViewById<TextView>(R.id.txtTickerPrice)
+        val mainLayout = itemView.findViewById<LinearLayout>(R.id.tickerScrollLinearLayout)
 
         fun bind(ticker: Ticker) {
             textTicker.text = ticker.name
@@ -55,6 +55,11 @@ class TickerAdapter(): RecyclerView.Adapter<TickerAdapter.TickerViewHolder>() {
                 textPrice.textColor = Color.RED
             }
             textPrice.text = "\$${ticker.price}"
+
+            mainLayout.setOnClickListener {
+                ticker.openJsonVersion((getMainContext() ?: mainLayout.context) as Activity)?.show()
+            }
+
         }
     }
 }

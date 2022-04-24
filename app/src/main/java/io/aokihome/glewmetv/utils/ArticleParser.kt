@@ -8,7 +8,7 @@ import org.json.JSONObject
 
 var articleList = mutableListOf<Article>()
 
-/** HOOKUPS **/
+/** Articles **/
 fun ArticleParser(response: Response): MutableList<Article> {
     val hookupList = toListOfJsonObjects(response)
     for (item in hookupList) {

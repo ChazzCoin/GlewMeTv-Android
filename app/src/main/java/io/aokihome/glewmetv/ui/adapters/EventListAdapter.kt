@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import io.aokihome.glewmetv.R
 import io.aokihome.glewmetv.db.Event
-import io.aokihome.glewmetv.ui.main.MainGlewMeTvActivity
+import io.aokihome.glewmetv.utils.onClickOpener
 
 
-class EventListAdapter(var context: MainGlewMeTvActivity?, var listOfEvents: MutableList<Event>? = null):
+class EventListAdapter(var listOfEvents: MutableList<Event>? = null):
         RecyclerView.Adapter<EventListAdapter.EventViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -31,14 +31,6 @@ class EventListAdapter(var context: MainGlewMeTvActivity?, var listOfEvents: Mut
         println("binding hookup")
         listOfEvents?.let { itEvents ->
             holder.bind(itEvents[position])
-            //onClickListener
-            holder.itemView.setOnClickListener {
-                context?.let {
-                    println("HOOKUP CLICKED: starting dialog now!")
-//                    readHookupDialog(it, itEvents[position]).show()
-                }
-
-            }
         }
     }
 
@@ -60,11 +52,12 @@ class EventListAdapter(var context: MainGlewMeTvActivity?, var listOfEvents: Mut
 //            txtEventMetaverseName.text = "Decentraland"
             if (event.image.isNotEmpty()) {
                 try {
-                    Picasso.get().load(event.image).fit().into(imgUrl)
+                    Glide.with(imgUrl.context).load(event.image).into(imgUrl)
                 } catch (e: Exception) {
                     println("Failed to load image: $e")
                 }
             }
+            imgUrl.onClickOpener(event)
 
         }
     }

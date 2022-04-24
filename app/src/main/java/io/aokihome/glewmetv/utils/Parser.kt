@@ -4,6 +4,8 @@ import com.github.kittinunf.fuel.core.Response
 import io.aokihome.glewmetv.db.*
 import org.json.JSONArray
 import org.json.JSONObject
+import com.google.gson.Gson
+import io.realm.RealmObject
 
 sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
 
@@ -54,23 +56,25 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
     //-> Hookups
     var HookupList = mutableListOf<Article>()
     //-> Data Packages
-    var MetaverseList = mutableListOf<io.aokihome.glewmetv.db.Metaverse>()
+    var metaJsonList = mutableListOf<JSONObject>()
+    var MetaverseList = mutableListOf<Metaverse>()
     var PriceList = mutableListOf<Ticker>()
     var GlewMeList = mutableListOf<io.aokihome.glewmetv.db.GlewMe>()
-    var EventList = mutableListOf<io.aokihome.glewmetv.db.Event>()
+    var EventList = mutableListOf<Event>()
 
     /** All Data Packages **/
     private fun initDataPackages(response: Response) {
         // GlewMe
+        jsonObject = response.toJsonObject()
         if (type == ALL_DATA_PACKAGES) {
-            packageParser(METAVERSE_PRICE_INFO, response)
-            packageParser(GLEWME, response)
-            packageParser(METAVERSE_INFO, response)
-            packageParser(EVENTS, response)
+            packageParser(METAVERSE_PRICE_INFO)
+            packageParser(GLEWME)
+            packageParser(METAVERSE_INFO)
+            packageParser(EVENTS)
             return
         }
         // Else:
-        packageParser(type, response)
+        packageParser(type)
     }
 
     /** Runs Parser Based on Type Inputted **/
@@ -87,9 +91,6 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
     private fun glewme(key: String, jsonObject: JSONObject?) {
         val glewMeObj = jsonObject?.toGlewMe(key)
         GlewMeList.add(glewMeObj ?: return)
-//        main {
-//            if (save) addGlewMeToSession(glewMeObj)
-//        }
 
     }
 
@@ -97,8 +98,10 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
     private fun metaverse(key: String, jsonObject: JSONObject?) {
         try {
             val metaObj = jsonObject?.toMetaverse(key)
+            if (jsonObject != null) {
+                metaJsonList.add(jsonObject)
+            }
             MetaverseList.add(metaObj ?: return)
-//        if (save) addMetaverseToSession(metaObj)
         } catch (e: Exception) {
             println("!!!!Failed Parser().Metaverse(): $e")
         }
@@ -109,7 +112,6 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
         val priceObj = jsonObject?.toTicker()
         PriceList.add(priceObj ?: return)
         println(PriceList)
-//        if (save) addMetaverseToSessionOnMain(metaObj)
     }
 
     /** Events Package **/
@@ -120,9 +122,8 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
     }
 
     // Dynamic Package Parser
-    private fun packageParser(type: String, response: Response) {
+    private fun packageParser(type: String) {
         try {
-            jsonObject = response.toJsonObject()
             //-> Check if METAVERSE INFO exists.
             jsonObject?.get(type)?.let {
                 val tempObj = it as? JSONObject
@@ -201,6 +202,14 @@ sealed class Parser(val save:Boolean=true, val type:String) : JSONObject() {
         return tempList
     }
 
+}
+
+fun RealmObject.toJSON(): JSONObject? {
+    tryCatch {
+        val jsonString = Gson().toJson(this)
+        return JSONObject(jsonString)
+    }
+    return null
 }
 
 /** JSON HELPER METHODS **/

@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="110dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="30dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +34,9 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imgEventImage"
         app:layout_constraintEnd_toEndOf="@+id/imgEventImage"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/imgEventImage"
-        app:layout_constraintTop_toTopOf="@+id/imgEventImage" />
+        app:layout_constraintTop_toTopOf="@+id/imgEventImage"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
